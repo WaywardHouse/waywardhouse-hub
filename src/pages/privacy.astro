@@ -1,0 +1,38 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Privacy" description="What this site stores, what it does not, and which third-party services are involved." active={undefined}>
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Privacy · Last updated 3 Apr 2026</span>
+      <h1>What we store. What we don't. How it moves.</h1>
+      <p class="wh-dek">This site is a static publication. Most pages collect nothing. When you use forms, analytics, or newsletter features, a small amount of data is processed so the site can function.</p>
+    </header>
+
+    <div class="wh-prose">
+      <p>This site is a static publication hosted on Cloudflare Pages. It does not require login. Most pages do not collect personal data directly.</p>
+
+      <h2>What Is Stored</h2>
+      <ul>
+        <li><strong>Theme preference</strong> is stored in your browser's <code>localStorage</code>. It is not transmitted anywhere.</li>
+        <li><strong>Reading progress</strong> may be stored in your browser's <code>localStorage</code> for parts of the site that track local completion state. That data stays on your device and can be cleared by clearing your browser's site data.</li>
+        <li><strong>Cloudflare Pages</strong> may log standard web server data such as IP address, browser, and pages visited as part of hosting. See <a href="https://www.cloudflare.com/en-ca/privacypolicy/">Cloudflare's privacy policy</a>.</li>
+      </ul>
+
+      <h2>Contact and Newsletter Forms</h2>
+      <p>If you submit the contact form, your name, email address, message content, and any page URL you choose to provide are processed by Formspree for delivery.</p>
+      <p>If you subscribe to the newsletter, your email address and optional name are processed through Buttondown. Newsletter data is used only to confirm your subscription, send Wayward House newsletter updates, and process unsubscribe requests. You can unsubscribe at any time from the link included in newsletter emails. Wayward House does not sell subscriber data.</p>
+
+      <h2>Analytics</h2>
+      <p>This site uses <a href="https://www.cloudflare.com/web-analytics/">Cloudflare Web Analytics</a>. Cloudflare collects anonymised usage data such as pages visited, referrer, browser, and country in order to provide aggregate traffic statistics. This site does not pass that data on to any third party.</p>
+
+      <h2>Third-Party Processors</h2>
+      <p>Depending on how you interact with the site, data may be processed by:</p>
+      <ul>
+        <li><a href="https://www.cloudflare.com/en-ca/privacypolicy/">Cloudflare</a> for hosting, analytics, and routing</li>
+        <li><a href="https://formspree.io/legal/privacy-policy/">Formspree</a> for contact-form handling</li>
+        <li><a href="https://buttondown.email/legal/privacy">Buttondown</a> for newsletter delivery</li>
+      </ul>
+    </div>
+  </section>
+</Layout>

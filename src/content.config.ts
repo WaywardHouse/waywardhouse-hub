@@ -1,20 +1,19 @@
 import { defineCollection, z } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+import { file } from 'astro/loaders';
 
 const essays = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/essays' }),
+  loader: file("src/content/essays/_essays.json"),
   schema: z.object({
+    id: z.string(),
     title: z.string(),
     dek: z.string().optional(),
     author: z.string().default('Paul Hobson'),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
     topic: z.string(),
     topics: z.array(z.string()).default([]),
-    readTime: z.number(),                    // minutes
+    readTime: z.number().default(10),
     coords: z.string().optional(),
-    location: z.string().optional(),
-    heroImage: z.string().optional(),        // image manifest id (e.g. "geo-01")
+    heroImage: z.string().optional(),
     heroTreatment: z.enum(['raw', 'warm', 'duotone', 'caption-bar']).optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
@@ -22,15 +21,15 @@ const essays = defineCollection({
 });
 
 const signals = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/signals' }),
+  loader: file("src/content/signals/_signals.json"),
   schema: z.object({
+    id: z.string(),
     issue: z.number(),
     title: z.string(),
     pubDate: z.coerce.date(),
     topic: z.string(),
     summary: z.string(),
     bullets: z.array(z.string()).default([]),
-    sources: z.array(z.string()).default([]),
     heroImage: z.string().optional(),
     draft: z.boolean().default(false),
   }),

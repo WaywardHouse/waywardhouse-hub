@@ -2,17 +2,28 @@
 # Apex normalisation
 https://www.wayward.house/*  https://wayward.house/:splat  301!
 
-# Books — each is a separate Cloudflare Pages deploy. We rewrite the apex's
-# /<book>/* to the book project's URL. Configure these in the Cloudflare
-# dashboard once each book has its own Pages project; the lines below are
-# the canonical mapping used by the design.
+# ── Old URL continuity (301 permanent) ────────────────────────────────────────
+# These can go live immediately — destination doesn't need to exist yet.
+# Old signal slugs → new issue-NNN path
+/articles/system-signals-001*  /signals/issue-001/  301
+/articles/system-signals-002*  /signals/issue-002/  301
+/articles/system-signals-003*  /signals/issue-003/  301
+/articles/system-signals-004*  /signals/issue-004/  301
+# All other /articles/* → /essays/*
+/articles/:slug  /essays/:slug/  301
+
+# ── Essays + Signals proxy (200 = transparent proxy) ─────────────────────────
+# Uncomment each line once the CF Pages project is live and verified.
+# /essays/*   https://wh-essays.pages.dev/:splat   200
+# /signals/*  https://wh-signals.pages.dev/:splat  200
+
+# ── Books proxy ───────────────────────────────────────────────────────────────
+# CF Pages project names match deploy.yml --project-name flags.
+# Uncomment each line once the project is live and verified at <slug>.pages.dev.
 #
-# Until books are deployed, /<book>/ is served by THIS site (a stub front
-# page produced by src/pages/[book]/index.astro). The rewrite kicks in once
-# the destination is live.
-#
-# /computational-geography/*  https://computational-geography.pages.dev/:splat  200
-# /mathematics/*              https://mathematics.pages.dev/:splat              200
-# /math-for-data-science-ai/* https://math-ds-ai.pages.dev/:splat               200
-# /data-engineering/*         https://data-engineering.pages.dev/:splat         200
-# /systems-thinking/*         https://systems-thinking.pages.dev/:splat         200
+# /learn/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
+# /learn/mathematics/*              https://wh-mathematics.pages.dev/:splat              200
+# /learn/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
+# /learn/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
+# /learn/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
+# /learn/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200

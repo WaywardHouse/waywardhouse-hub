@@ -1,0 +1,66 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Start Here" description="Three ways into Wayward House: long-form essays, a weekly digest, or structured learning." active={undefined}>
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Orientation</span>
+      <h1>Pick the route that matches the job.</h1>
+      <p class="wh-dek">Wayward House is easiest when you treat it as three distinct routes: long-form essays for context, System Signals for the current week, and Learn for the structured climb.</p>
+    </header>
+
+    <div class="wh-grid wh-grid--3">
+      <a class="wh-card wh-card--route" href="/essays/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Long-form</span>
+          <h2>Essays</h2>
+          <p>Use this route when you want stakes, argument, and context first. Each essay is built to be re-read, not skimmed.</p>
+          <span class="wh-btn wh-btn--primary">Open essays →</span>
+        </div>
+      </a>
+      <a class="wh-card wh-card--route" href="/signals/">
+        <div class="wh-card__body">
+          <span class="wh-kicker wh-kicker--amber">Weekly</span>
+          <h2>System Signals</h2>
+          <p>Use this route when you want the shortest current read, sorted by system rather than by noise.</p>
+          <span class="wh-btn wh-btn--amber">Open signals →</span>
+        </div>
+      </a>
+      <a class="wh-card wh-card--route" href="/library/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Structured</span>
+          <h2>Library</h2>
+          <p>Use this route when you want sequence, scaffolding, and deliberate progression through computational geography, mathematics, and systems thinking.</p>
+          <span class="wh-btn wh-btn--ghost">Open library →</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="wh-wrap wh-section">
+    <h2>Reliable starting points</h2>
+    <div class="wh-grid wh-grid--3">
+      <a class="wh-card" href="/essays/fire-country/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Latest Essay</span>
+          <h3>Fire Country</h3>
+          <p>Alberta's wildland-urban interface, the 2016 Fort McMurray fire, and how a changing fire climate is reshaping settlement risk.</p>
+        </div>
+      </a>
+      <a class="wh-card" href="/signals/issue-004/">
+        <div class="wh-card__body">
+          <span class="wh-kicker wh-kicker--amber">Latest Signal</span>
+          <h3>System Signals No. 4</h3>
+          <p>Washington's entry fee, oil's $20 round trip, and the fuel bill landing on everything from airlines to groceries.</p>
+        </div>
+      </a>
+      <a class="wh-card" href="/library/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Structured Learning</span>
+          <h3>The Library</h3>
+          <p>Begin with the calmest on-ramp into equations, maps, units, uncertainty, and the logic of modelling.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "issue-004",
+    "issue": 4,
+    "title": "System Signals No. 4",
+    "pubDate": "2026-04-24",
+    "topic": "Economy",
+    "summary": "The entry fee, the $20 round trip, and the fuel bill landing on everything from airlines to groceries.",
+    "bullets": [
+      "Washington demands an 'entry fee' before CUSMA talks begin.",
+      "Oil makes a $20 round trip in five days; airlines cut capacity and grocers absorb fuel surcharges.",
+      "Trans Mountain posts its first full-utilisation month; Alberta tables a 120-day approvals bill."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
+    "id": "issue-003",
+    "issue": 3,
+    "title": "System Signals No. 3",
+    "pubDate": "2026-04-16",
+    "topic": "Economy",
+    "summary": "The CN bridge, the Pacific pipeline paradox, and the distance between an energy superpower and its nearest tide water.",
+    "bullets": [
+      "A 57-year-old bridge cuts Trans Mountain tanker departures nearly in half.",
+      "The Pacific diversification pipeline remains 18 months from even a formal application.",
+      "Carney's majority clears the political uncertainty queue."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
+    "id": "issue-002",
+    "issue": 2,
+    "title": "System Signals No. 2",
+    "pubDate": "2026-04-14",
+    "topic": "Economy",
+    "summary": "Hormuz premium, majority government, and the gap between Canada's trade diversification numbers and their structural reality.",
+    "bullets": [
+      "Alberta's oil windfall and its inflationary shadow: Trans Mountain at near-capacity.",
+      "Canada's diversification story unravels under the gold adjustment.",
+      "Canadian ports outperform US rivals for the first time in a decade."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
+    "id": "issue-001",
+    "issue": 1,
+    "title": "System Signals No. 1",
+    "pubDate": "2026-04-03",
+    "topic": "Economy",
+    "summary": "Corridors, state capacity, and how this week's shocks move from infrastructure into daily cost.",
+    "bullets": [
+      "Stronger Alberta export dependence and faster project-state coordination.",
+      "Canada's infrastructure response to trade insecurity; Arctic connectivity as sovereignty.",
+      "Global energy shocks propagating into logistics and household cost."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  }
+]

@@ -1,0 +1,40 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Page Not Found" description="The page you wanted is gone, moved, or never existed." active={undefined}>
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">404 · Not Found</span>
+      <h1>Page not found.</h1>
+      <p class="wh-dek">You probably followed an old link, a stale bookmark, or a path that changed as the site grew. Use the quick routes below to get back to something useful.</p>
+      <div class="wh-page-header__cta">
+        <a class="wh-btn wh-btn--primary" href="/">Home →</a>
+        <a class="wh-btn wh-btn--ghost" href="/start-here/">Start here</a>
+      </div>
+    </header>
+
+    <div class="wh-grid wh-grid--3">
+      <a class="wh-card" href="/essays/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Read</span>
+          <h3>Essays</h3>
+          <p>Long-form analysis on place, power, and pressure.</p>
+        </div>
+      </a>
+      <a class="wh-card" href="/library/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Learn</span>
+          <h3>Library</h3>
+          <p>Structured books on computational geography, modelling, and systems thinking.</p>
+        </div>
+      </a>
+      <a class="wh-card" href="/topics/">
+        <div class="wh-card__body">
+          <span class="wh-kicker">Browse</span>
+          <h3>Topics</h3>
+          <p>Follow a subject through the archive without relying on chronology.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</Layout>

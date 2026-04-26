@@ -1,0 +1,56 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Contact" description="Questions, corrections, and thoughtful notes are welcome." active={undefined}>
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Contact · Calgary, Alberta</span>
+      <h1>Send a note or a fix.</h1>
+      <p class="wh-dek">Questions, corrections, and thoughtful notes are welcome. If something is unclear, broken, or worth discussing, write in. If you're contacting about a specific page, include the URL — that makes it easier to respond usefully.</p>
+    </header>
+
+    <div class="wh-contact">
+      <form class="wh-contact__form" action="https://formspree.io/f/xbdabrjw" method="POST">
+        <input type="hidden" name="_site" value="Wayward House" />
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <div class="wh-contact__row">
+          <div class="wh-contact__field">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name" placeholder="Your name" />
+          </div>
+          <div class="wh-contact__field">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+          </div>
+        </div>
+
+        <div class="wh-contact__row">
+          <div class="wh-contact__field">
+            <label for="cf-topic">What is this about?</label>
+            <select id="cf-topic" name="topic" required>
+              <option value="">Choose one</option>
+              <option value="article-correction">Article correction</option>
+              <option value="textbook-question">Textbook question or stuck point</option>
+              <option value="technical-problem">Technical problem on the site</option>
+              <option value="idea-or-suggestion">Idea, suggestion, or topic request</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+          <div class="wh-contact__field">
+            <label for="cf-url">Page URL <span class="wh-contact__optional">(optional)</span></label>
+            <input type="url" id="cf-url" name="page_url" autocomplete="url" placeholder="https://wayward.house/..." />
+          </div>
+        </div>
+
+        <div class="wh-contact__field">
+          <label for="cf-message">Message</label>
+          <p class="wh-contact__hint">For corrections, the most helpful notes include the claim, the problem, and what source or reasoning points the other way.</p>
+          <textarea id="cf-message" name="message" required placeholder="What's on your mind?" rows="6"></textarea>
+        </div>
+
+        <button type="submit" class="wh-btn wh-btn--primary">Send message →</button>
+      </form>
+    </div>
+  </section>
+</Layout>
