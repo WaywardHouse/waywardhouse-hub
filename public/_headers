@@ -1,0 +1,28 @@
+# Cloudflare Pages — _headers
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Cache hashed asset bundles aggressively
+/_assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static images shipped in /public/images/
+/images/*
+  Cache-Control: public, max-age=2592000
+
+# Pagefind index — re-uploaded on every build
+/pagefind/*
+  Cache-Control: public, max-age=300
+
+# RSS — short cache; readers poll
+/rss.xml
+  Cache-Control: public, max-age=300, s-maxage=600
+/signals/rss.xml
+  Cache-Control: public, max-age=300, s-maxage=600
+
+# OG images — generated at build time, immutable per URL hash
+/og/*
+  Cache-Control: public, max-age=86400, s-maxage=604800

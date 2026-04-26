@@ -1,0 +1,41 @@
+---
+import Layout from '@layouts/Layout.astro';
+import WhImage from '@components/WhImage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  return topics.map((t) => ({ params: { slug: t.data.slug }, props: { topic: t } }));
+}
+const { topic } = Astro.props;
+const allEssays = await getCollection('essays', ({ data }) => !data.draft);
+const slug = topic.data.slug;
+const essays = allEssays.filter((e) =>
+  e.data.topics.some((t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug),
+);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<Layout title={`Topic: ${topic.data.title}`} active="topics" description={topic.data.description}>
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <a class="wh-kicker" href="/topics/">← All topics</a>
+      <h1>{topic.data.title}</h1>
+      <p class="wh-dek">{topic.data.description}</p>
+    </header>
+    <ul class="wh-essay-list">
+      {essays.map((e) => (
+        <li class="wh-essay-row">
+          <a class="wh-essay-row__img" href={`/essays/${e.id}/`}>
+            <WhImage id={e.data.heroImage ?? 'geo-04'} treatment={e.data.heroTreatment ?? 'warm'} ratio="3/2" />
+          </a>
+          <div class="wh-essay-row__body">
+            <span class="wh-kicker">{e.data.topic} · {e.data.readTime} min · {fmt(e.data.pubDate)}</span>
+            <h2><a href={`/essays/${e.id}/`}>{e.data.title}</a></h2>
+            {e.data.dek && <p>{e.data.dek}</p>}
+          </div>
+        </li>
+      ))}
+      {essays.length === 0 && <li class="wh-empty">No essays under this topic yet.</li>}
+    </ul>
+  </section>
+</Layout>

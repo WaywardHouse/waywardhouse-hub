@@ -1,0 +1,35 @@
+---
+import Layout from '@layouts/Layout.astro';
+import WhImage from '@components/WhImage.astro';
+import { library } from '@content/images';
+
+const pillars = ['Geography', 'Energy', 'Systems', 'Places', 'Cartographic'] as const;
+const filterParam = Astro.url.searchParams.get('pillar');
+---
+<Layout title="Image Library" description="The Wayward House visual archive.">
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Visual archive · {library.length} images · 5 pillars</span>
+      <h1>Image Library</h1>
+      <p class="wh-dek">The image manifest is generated from <code>src/content/images.ts</code>. Treatments are applied at render time; originals are unchanged.</p>
+    </header>
+
+    <div class="wh-pillars">
+      <a class={!filterParam ? 'is-active' : ''} href="/image-library/">All</a>
+      {pillars.map((p) => <a class={filterParam === p ? 'is-active' : ''} href={`/image-library/?pillar=${p}`}>{p}</a>)}
+    </div>
+
+    <div class="wh-img-grid">
+      {library.filter((e) => !filterParam || e.pillar === filterParam).map((e) => (
+        <figure class="wh-img-cell">
+          <WhImage id={e.id} treatment={e.defaultTreatment} ratio="3/2" />
+          <figcaption>
+            <span class="wh-kicker">{e.pillar} · {e.id}</span>
+            <strong>{e.title}</strong>
+            <span class="wh-img-cell__coords">{e.coords} · {e.author}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+</Layout>

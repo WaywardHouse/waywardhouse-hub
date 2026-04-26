@@ -1,0 +1,32 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const topics = await getCollection('topics');
+const essays = await getCollection('essays', ({ data }) => !data.draft);
+
+const counts = new Map<string, number>();
+for (const e of essays) {
+  for (const t of e.data.topics) {
+    const key = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+}
+---
+<Layout title="Topics" active="topics" description="Browse essays and signals by topic.">
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Topics</span>
+      <h1>Browse the work by subject</h1>
+    </header>
+    <div class="wh-topics-grid">
+      {topics.map((t) => (
+        <a class="wh-topic-card" href={`/topics/${t.data.slug}/`}>
+          <span class="wh-kicker">{t.data.pillar ?? '—'} · {counts.get(t.data.slug) ?? 0} essays</span>
+          <h2>{t.data.title}</h2>
+          <p>{t.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

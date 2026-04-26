@@ -1,0 +1,26 @@
+# build
+dist/
+.astro/
+.wrangler/
+.pagefind/
+
+# deps
+node_modules/
+
+# env
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# os
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/
+
+# logs
+*.log
+npm-debug.log*

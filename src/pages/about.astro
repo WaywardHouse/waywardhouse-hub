@@ -1,0 +1,30 @@
+---
+import Layout from '@layouts/Layout.astro';
+import WhImage from '@components/WhImage.astro';
+---
+<Layout title="About" active="about" description="About Wayward House and Paul Hobson.">
+  <section class="wh-wrap wh-section wh-about">
+    <header class="wh-page-header">
+      <span class="wh-kicker">About · Calgary, Alberta</span>
+      <h1>Wayward House is a writing practice.</h1>
+      <p class="wh-dek">Long-form essays, a monthly digest, and books on geography, mathematics, and the modern energy economy. Written from the prairie edge of the Rockies, in public, slowly.</p>
+    </header>
+    <div class="wh-about__grid">
+      <div class="wh-about__copy">
+        <h2>What's here</h2>
+        <p><strong>Essays.</strong> Long pieces, edited carefully. No engagement loop, no hot takes. They are meant to be re-read.</p>
+        <p><strong>System Signals.</strong> Once a month, plain-text email with a single signal worth attention.</p>
+        <p><strong>Library.</strong> Books in progress on computational geography, mathematics, data engineering, and systems thinking. Each book is its own Quarto deploy.</p>
+
+        <h2>Who's writing</h2>
+        <p>Paul Hobson — engineer, geographer, and longtime maintainer of small open-source things. Trained in the foothills, currently in Calgary.</p>
+
+        <h2>The stack</h2>
+        <p>This site is an Astro static build deployed to Cloudflare Pages. Books are Quarto projects deployed independently and routed under the apex domain. Search is Pagefind, indexed at build time.</p>
+      </div>
+      <aside class="wh-about__photo">
+        <WhImage id="pl-02" treatment="warm" ratio="3/4" />
+      </aside>
+    </div>
+  </section>
+</Layout>

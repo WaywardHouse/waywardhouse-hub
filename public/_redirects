@@ -1,0 +1,18 @@
+# Cloudflare Pages — _redirects
+# Apex normalisation
+https://www.wayward.house/*  https://wayward.house/:splat  301!
+
+# Books — each is a separate Cloudflare Pages deploy. We rewrite the apex's
+# /<book>/* to the book project's URL. Configure these in the Cloudflare
+# dashboard once each book has its own Pages project; the lines below are
+# the canonical mapping used by the design.
+#
+# Until books are deployed, /<book>/ is served by THIS site (a stub front
+# page produced by src/pages/[book]/index.astro). The rewrite kicks in once
+# the destination is live.
+#
+# /computational-geography/*  https://computational-geography.pages.dev/:splat  200
+# /mathematics/*              https://mathematics.pages.dev/:splat              200
+# /math-for-data-science-ai/* https://math-ds-ai.pages.dev/:splat               200
+# /data-engineering/*         https://data-engineering.pages.dev/:splat         200
+# /systems-thinking/*         https://systems-thinking.pages.dev/:splat         200

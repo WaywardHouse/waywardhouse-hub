@@ -1,0 +1,33 @@
+---
+/**
+ * Placeholder image — used when no real photograph has been assigned yet.
+ * Mirror of the prototype's <PlaceholderImg>, ported to a static .astro component.
+ * In production, prefer <WhImage> with a manifest entry; placeholders ship the
+ * site without a network round-trip and double as the "image not assigned" state.
+ */
+interface Props {
+  label: string;
+  tag?: string;
+  tone?: 'land' | 'fire' | 'storm' | 'lake' | 'night' | 'slate' | 'paper' | 'map';
+  ratio?: string;
+}
+const { label, tag = 'Placeholder', tone = 'land', ratio = '16 / 10' } = Astro.props;
+
+const palettes = {
+  land:   'linear-gradient(155deg, #1e3350 0%, #2a4a5a 22%, #3a5040 48%, #7a7848 62%, #b0a458 82%, #4a3c18 100%)',
+  fire:   'linear-gradient(160deg, #0a0a08 0%, #2a1a10 18%, #4a2010 32%, #3a3020 48%, #505840 65%, #2a4830 100%)',
+  storm:  'linear-gradient(180deg, #0a1422 0%, #1b2a3d 25%, #2f3b50 48%, #46495a 68%, #6a685f 88%, #8a7f5a 100%)',
+  lake:   'linear-gradient(160deg, #0f1c28 0%, #1a3042 22%, #2f4e5c 42%, #3a5f66 58%, #6a7f6c 78%, #a59668 100%)',
+  night:  'linear-gradient(180deg, #050608 0%, #0a1220 18%, #12243a 42%, #2a3450 62%, #624530 84%, #8a5020 100%)',
+  slate:  'linear-gradient(180deg, #0f0f0d 0%, #1a1a18 50%, #2a2a26 100%)',
+  paper:  'linear-gradient(180deg, #f3ede3 0%, #e7dfd2 60%, #cdc2ab 100%)',
+  map:    'linear-gradient(160deg, #121816 0%, #1a241c 35%, #2d3b2e 60%, #3f5040 85%)',
+};
+---
+<div class="wh-ph" style={`aspect-ratio: ${ratio}; background: ${palettes[tone]}`}>
+  <div class="wh-ph__grain"></div>
+  <div class="wh-ph__label">
+    <span>{label}</span>
+    <span class="wh-ph__tag">{tag}</span>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+---
+// Primitives — pure-CSS-class wrappers used inline in pages and MDX.
+interface Props {
+  kicker: string;
+  title: string;
+  link?: string;
+  linkHref?: string;
+  tone?: 'light' | 'dark';
+}
+const { kicker, title, link, linkHref = '#', tone = 'light' } = Astro.props;
+---
+<div class={`wh-sh ${tone === 'dark' ? 'wh-sh--dark' : ''}`}>
+  <div class="wh-sh__left">
+    <span class={`wh-kicker ${tone === 'dark' ? 'wh-kicker--amber' : ''}`}>{kicker}</span>
+    <h2>{title}</h2>
+  </div>
+  {link && <a class="wh-sh__link" href={linkHref}>{link} →</a>}
+</div>

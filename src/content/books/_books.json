@@ -1,0 +1,83 @@
+[
+  {
+    "id": "computational-geography",
+    "n": "01",
+    "title": "Computational Geography",
+    "slug": "computational-geography",
+    "status": "flagship",
+    "statusLabel": "Flagship · Active",
+    "description": "A guided path through mathematics foundations, earth systems, GIS, hazards, and economic geography. Built for readers who want to understand the machinery, not just the output.",
+    "topics": ["Earth systems", "GIS", "Hazards", "Economic geography"],
+    "cover": { "mode": "photo", "color": "#1a3a2a", "image": "geo-02", "kicker": "Computational Geography" },
+    "repo": "WaywardHouse/computational-geography",
+    "deployUrl": "https://wayward.house/computational-geography/",
+    "pdfUrl": "/computational-geography/book.pdf",
+    "featured": true,
+    "chapters": [
+      { "n": "1", "part": "I · Foundations", "title": "Coordinates, projections, and the messy middle" },
+      { "n": "2", "part": "I · Foundations", "title": "DEMs: rasters, tiles, and voids" },
+      { "n": "3", "part": "II · Earth systems", "title": "Watersheds and the flow you can trust" },
+      { "n": "4", "part": "II · Earth systems", "title": "Cryosphere & mountain systems" },
+      { "n": "5", "part": "II · Earth systems", "title": "Atmospheric hazards" },
+      { "n": "6", "part": "III · People on the land", "title": "Economic systems" },
+      { "n": "7", "part": "III · People on the land", "title": "Environmental systems & risk" },
+      { "n": "8", "part": "III · People on the land", "title": "Machine learning on geographic data" }
+    ]
+  },
+  {
+    "id": "mathematics",
+    "n": "02",
+    "title": "Mathematics",
+    "slug": "mathematics",
+    "status": "active",
+    "statusLabel": "Active · 8 volumes",
+    "description": "Eight volumes from arithmetic foundations to upper-year engineering mathematics. Triangulated from Alberta Gr 7–12, Stroud & Booth, Kreyszig, and the U of A MATH sequence.",
+    "topics": ["Foundations", "Engineering math", "Upper-year"],
+    "cover": { "mode": "typographic", "color": "#2a3a55", "kicker": "Mathematics" },
+    "repo": "WaywardHouse/mathematics",
+    "deployUrl": "https://wayward.house/mathematics/",
+    "chapters": []
+  },
+  {
+    "id": "math-for-data-science-ai",
+    "n": "03",
+    "title": "Mathematics for Data Science & AI",
+    "slug": "math-for-data-science-ai",
+    "status": "drafting",
+    "statusLabel": "Drafting · 12 chapters",
+    "description": "Linear algebra, probability, optimization, and information theory — built on the Mathematics foundations and aimed straight at the modern data and ML stack.",
+    "topics": ["Linear algebra", "Probability", "Optimization", "Information"],
+    "cover": { "mode": "photo", "color": "#3a2a55", "image": "sys-04", "kicker": "Math for DS & AI" },
+    "repo": "WaywardHouse/math-for-data-science-ai",
+    "deployUrl": "https://wayward.house/math-for-data-science-ai/",
+    "chapters": []
+  },
+  {
+    "id": "data-engineering",
+    "n": "04",
+    "title": "Data Engineering for Spatial Systems",
+    "slug": "data-engineering",
+    "status": "drafting",
+    "statusLabel": "Drafting · 9 chapters",
+    "description": "Architecture, spatial databases, pipelines, cloud, streaming, APIs, quality and governance, and ML platforms — for systems that have to know where things are.",
+    "topics": ["Architecture", "Spatial DBs", "Pipelines", "ML platforms"],
+    "cover": { "mode": "photo", "color": "#1a1a2a", "image": "sys-01", "kicker": "Data Engineering" },
+    "repo": "WaywardHouse/data-engineering",
+    "deployUrl": "https://wayward.house/data-engineering/",
+    "chapters": []
+  },
+  {
+    "id": "systems-thinking",
+    "n": "05",
+    "title": "Systems Thinking for Modellers",
+    "slug": "systems-thinking",
+    "status": "drafting",
+    "statusLabel": "Drafting · 9 chapters",
+    "description": "Feedback, complexity and emergence — for the people who build models and have to explain why the model and the world disagree.",
+    "topics": ["Feedback", "Complexity", "Emergence", "Modelling"],
+    "cover": { "mode": "photo", "color": "#552a1a", "image": "geo-01", "kicker": "Systems Thinking" },
+    "repo": "WaywardHouse/systems-thinking",
+    "deployUrl": "https://wayward.house/systems-thinking/",
+    "chapters": []
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "energy-systems",
+    "title": "Energy systems",
+    "slug": "energy-systems",
+    "pillar": "Energy",
+    "description": "Generation, transmission, storage, and the political economy of power."
+  },
+  {
+    "id": "watersheds",
+    "title": "Watersheds",
+    "slug": "watersheds",
+    "pillar": "Geography",
+    "description": "Drainage, flow, and how we draw the lines around moving water."
+  },
+  {
+    "id": "cartography",
+    "title": "Cartography",
+    "slug": "cartography",
+    "pillar": "Cartographic",
+    "description": "Maps as arguments — projection, classification, and the power of the view from above."
+  },
+  {
+    "id": "spatial-data",
+    "title": "Spatial data",
+    "slug": "spatial-data",
+    "pillar": "Systems",
+    "description": "Pipelines, formats, and the small decisions that decide what data is worth keeping."
+  },
+  {
+    "id": "western-canada",
+    "title": "Western Canada",
+    "slug": "western-canada",
+    "pillar": "Places",
+    "description": "Prairie, foothills, boreal, port — the geography of the Canadian West."
+  },
+  {
+    "id": "risk",
+    "title": "Risk",
+    "slug": "risk",
+    "pillar": "Systems",
+    "description": "Hazard, vulnerability, exposure: how we put numbers on uncertain futures."
+  },
+  {
+    "id": "modelling",
+    "title": "Modelling",
+    "slug": "modelling",
+    "pillar": "Systems",
+    "description": "Building, calibrating, and arguing with models that try to describe the world."
+  },
+  {
+    "id": "places",
+    "title": "Places",
+    "slug": "places",
+    "pillar": "Places",
+    "description": "Field notes, town visits, and the texture of specific locations."
+  },
+  {
+    "id": "economic-geography",
+    "title": "Economic geography",
+    "slug": "economic-geography",
+    "pillar": "Economy",
+    "description": "How money, trade, and production shape the land — and vice versa."
+  },
+  {
+    "id": "physical-geography",
+    "title": "Physical geography",
+    "slug": "physical-geography",
+    "pillar": "Geography",
+    "description": "Landforms, climate, and the natural processes that make places what they are."
+  },
+  {
+    "id": "urban-geography",
+    "title": "Urban geography",
+    "slug": "urban-geography",
+    "pillar": "Geography",
+    "description": "Cities, density, and the spatial logic of how people cluster and move."
+  },
+  {
+    "id": "environmental-geography",
+    "title": "Environmental geography",
+    "slug": "environmental-geography",
+    "pillar": "Geography",
+    "description": "The intersection of human systems and natural ones — land, air, water, and what we do to them."
+  },
+  {
+    "id": "historical-geography",
+    "title": "Historical geography",
+    "slug": "historical-geography",
+    "pillar": "Geography",
+    "description": "How places were shaped by the past — settlement patterns, resource extraction, and long slow change."
+  },
+  {
+    "id": "monitoring",
+    "title": "Monitoring",
+    "slug": "monitoring",
+    "pillar": "Systems",
+    "description": "Sensors, networks, and the infrastructure of knowing what is happening where."
+  },
+  {
+    "id": "infrastructure",
+    "title": "Infrastructure",
+    "slug": "infrastructure",
+    "pillar": "Systems",
+    "description": "The built systems that move people, goods, energy, and information across space."
+  },
+  {
+    "id": "energy-policy",
+    "title": "Energy policy",
+    "slug": "energy-policy",
+    "pillar": "Energy",
+    "description": "The regulatory, political, and economic choices that govern how energy is produced and distributed."
+  },
+  {
+    "id": "trade-policy",
+    "title": "Trade policy",
+    "slug": "trade-policy",
+    "pillar": "Economy",
+    "description": "Tariffs, agreements, and the political economy of how goods cross borders."
+  }
+]

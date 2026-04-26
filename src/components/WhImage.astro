@@ -1,0 +1,102 @@
+---
+/**
+ * <WhImage> — house image component. Reads from src/content/images.ts (the
+ * machine-readable manifest, mirrored from the design's IMG_LIBRARY) and emits
+ * a treatment wrapper with Astro's <Image> doing responsive size generation.
+ *
+ * The four treatments are 1:1 with the design system:
+ *   - raw          unfiltered (default for inline figures)
+ *   - warm         saturate(.72) contrast(1.04) brightness(.98) sepia(.08) + grain
+ *   - duotone      grayscale + accent multiply (default accent var(--wh-red))
+ *   - caption-bar  light filter + amber coords bar + filename + WH mark
+ *
+ * Cloudflare Pages serves the optimized variants Astro emits at build time; if
+ * you switch to Cloudflare Images, set `imageService: 'cloudflare'` in
+ * astro.config.mjs and this component continues to work unchanged.
+ */
+import { manifest, type ImageId, type Treatment } from '@content/images';
+
+interface Props {
+  id: ImageId;
+  treatment?: Treatment;
+  ratio?: string;       // e.g. "21/9", "3/2"
+  alt?: string;
+  /** Override accent for duotone (defaults to var(--wh-red)). */
+  accent?: string;
+  /** caption-bar: override the small mono fields */
+  coords?: string;
+  filename?: string;
+  issue?: string;
+  /** Width hints for srcset; Astro picks the closest. */
+  widths?: number[];
+  loading?: 'eager' | 'lazy';
+}
+const {
+  id,
+  treatment: treatmentProp,
+  ratio: ratioProp,
+  alt: altProp,
+  accent = 'var(--wh-red)',
+  coords: coordsProp,
+  filename: filenameProp,
+  issue,
+  widths = [400, 800, 1200, 1600, 2000],
+  loading = 'lazy',
+} = Astro.props;
+
+const entry = manifest[id];
+if (!entry) throw new Error(`<WhImage> unknown id: ${id}. Add it to src/content/images.ts.`);
+
+const treatment = treatmentProp ?? entry.defaultTreatment ?? 'raw';
+const ratio = ratioProp ?? entry.aspects?.[0] ?? '3/2';
+const alt = altProp ?? entry.title;
+const coords = coordsProp ?? entry.coords;
+const filename = filenameProp ?? `${entry.slug}.jpg`;
+
+// Public URL — for now, hotlinking Unsplash. Swap to local /public/images/<pillar>/<slug>.jpg
+// when you've vendored the photographs. Astro's <Image> handles either source.
+const src = entry.unsplash
+  ? `https://images.unsplash.com/photo-${entry.unsplash}?w=2000&q=82&auto=format&fit=crop&crop=edges`
+  : `/images/${entry.pillar.toLowerCase()}/${entry.slug}.jpg`;
+---
+<figure class={`wh-img wh-img--${treatment}`} style={`--wh-img-ratio: ${ratio}; --wh-img-accent: ${accent};`}>
+  <div class="wh-img__frame">
+    <img
+      src={src}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      sizes="(min-width: 1280px) 1280px, 100vw"
+    />
+    {treatment === 'duotone' && (
+      <>
+        <div class="wh-img__duotone-wash" aria-hidden="true"></div>
+        <div class="wh-img__duotone-deep" aria-hidden="true"></div>
+      </>
+    )}
+    {treatment === 'warm' && (
+      <>
+        <div class="wh-img__warm-vignette" aria-hidden="true"></div>
+        <div class="wh-img__warm-grain" aria-hidden="true"></div>
+      </>
+    )}
+    {treatment === 'caption-bar' && (
+      <>
+        <div class="wh-img__cap-top">
+          <span><span class="wh-img__cap-tick"></span>{coords}</span>
+          {issue && <span>{issue}</span>}
+        </div>
+        <div class="wh-img__cap-bot">
+          <span>{filename}</span>
+          <span class="wh-img__cap-mark">WH</span>
+        </div>
+      </>
+    )}
+  </div>
+  {entry.author && (
+    <figcaption class="wh-img__credit">
+      <slot>{alt}</slot>
+      <span class="wh-img__credit-author">— {entry.author} · Unsplash</span>
+    </figcaption>
+  )}
+</figure>

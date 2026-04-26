@@ -1,0 +1,169 @@
+---
+import Layout from '@layouts/Layout.astro';
+import SectionHead from '@components/SectionHead.astro';
+import TopicStrip from '@components/TopicStrip.astro';
+import WhImage from '@components/WhImage.astro';
+import { getCollection } from 'astro:content';
+
+const allEssays = (await getCollection('essays', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const featured = allEssays.find((e) => e.data.featured) ?? allEssays[0];
+const recent = allEssays.filter((e) => e.id !== featured?.id).slice(0, 6);
+
+const allSignals = (await getCollection('signals', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.issue - a.data.issue);
+const latestSignal = allSignals[0];
+
+const books = (await getCollection('books')).map((b) => b.data)
+  .sort((a, b) => Number(a.n) - Number(b.n));
+const featuredBook = books.find((b) => b.featured) ?? books[0];
+
+const topics = ['Energy systems', 'Cartography', 'Watersheds', 'Spatial data', 'Western Canada', 'Risk', 'Modelling'];
+
+// Hero variant — switchable in the admin/preview overlay (see <HeroSwitcher />).
+// Default is "cinematic" per the design handoff.
+const heroVariant = (Astro.url.searchParams.get('hero') ?? 'cinematic') as 'cinematic' | 'editorial' | 'document';
+
+const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<Layout title="Wayward House" active={undefined}>
+  {/* Hero — Cinematic */}
+  {heroVariant === 'cinematic' && featured && (
+    <section class="wh-hero wh-hero--cinematic">
+      <div class="wh-hero__bg">
+        <WhImage id={featured.data.heroImage ?? 'geo-02'} treatment="duotone" ratio="21/9" loading="eager" />
+      </div>
+      <div class="wh-hero__scrim"></div>
+      <div class="wh-wrap wh-hero__inner">
+        <div class="wh-hero__meta">
+          <span>Featured Essay</span>
+          <span>·</span>
+          <span>{featured.data.topic}</span>
+          <span>·</span>
+          <span>{featured.data.readTime} min</span>
+        </div>
+        <h1 class="wh-hero__title">{featured.data.title}</h1>
+        {featured.data.dek && <p class="wh-hero__dek">{featured.data.dek}</p>}
+        <div class="wh-hero__cta">
+          <a class="wh-btn wh-btn--primary" href={`/essays/${featured.id}/`}>Read essay →</a>
+          <a class="wh-btn wh-btn--ghost" href="/essays/">All essays</a>
+        </div>
+        <div class="wh-hero__footer">
+          <span>{featured.data.coords ?? '53°32′N · 113°29′W'}</span>
+          <span>{fmtDate(featured.data.pubDate)}</span>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* Hero — Editorial */}
+  {heroVariant === 'editorial' && featured && (
+    <section class="wh-hero wh-hero--editorial wh-wrap">
+      <div class="wh-hero__split">
+        <div class="wh-hero__split-text">
+          <span class="wh-kicker">Featured · {featured.data.topic}</span>
+          <h1>{featured.data.title}</h1>
+          {featured.data.dek && <p class="wh-dek">{featured.data.dek}</p>}
+          <a class="wh-btn wh-btn--primary" href={`/essays/${featured.id}/`}>Read →</a>
+        </div>
+        <div class="wh-hero__split-img">
+          <WhImage id={featured.data.heroImage ?? 'geo-01'} treatment="warm" ratio="3/4" loading="eager" />
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* Hero — Document */}
+  {heroVariant === 'document' && featured && (
+    <section class="wh-hero wh-hero--document wh-wrap">
+      <div class="wh-doc-stamp">
+        <div class="wh-doc-stamp__row"><span>Volume 04</span><span>Spring 2026</span></div>
+        <h1>{featured.data.title}</h1>
+        <p class="wh-dek">{featured.data.dek}</p>
+        <a class="wh-btn wh-btn--primary" href={`/essays/${featured.id}/`}>Read essay →</a>
+      </div>
+    </section>
+  )}
+
+  <TopicStrip items={topics} />
+
+  {/* Recent essays */}
+  <section class="wh-wrap wh-section">
+    <SectionHead kicker="01 · Recent Essays" title="What we've been working through" link="All essays" linkHref="/essays/" />
+    <div class="wh-grid wh-grid--3">
+      {recent.map((e) => (
+        <a class="wh-card" href={`/essays/${e.id}/`}>
+          <div class="wh-card__img">
+            <WhImage id={e.data.heroImage ?? 'geo-04'} treatment={e.data.heroTreatment ?? 'warm'} ratio="3/2" />
+          </div>
+          <div class="wh-card__body">
+            <span class="wh-kicker">{e.data.topic} · {e.data.readTime} min</span>
+            <h3>{e.data.title}</h3>
+            {e.data.dek && <p>{e.data.dek}</p>}
+            <span class="wh-card__date">{fmtDate(e.data.pubDate)}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {/* Latest System Signal */}
+  {latestSignal && (
+    <section class="wh-band wh-band--dark">
+      <div class="wh-wrap wh-band__inner">
+        <SectionHead kicker={`02 · System Signals · Issue ${String(latestSignal.data.issue).padStart(3, '0')}`}
+                     title={latestSignal.data.title}
+                     link="Read issue" linkHref={`/signals/${latestSignal.id}/`}
+                     tone="dark" />
+        <p class="wh-band__lede">{latestSignal.data.summary}</p>
+        <ul class="wh-bullets">
+          {latestSignal.data.bullets.slice(0, 3).map((b) => <li>{b}</li>)}
+        </ul>
+        <a class="wh-btn wh-btn--amber" href="/signals/#subscribe">Subscribe to System Signals →</a>
+      </div>
+    </section>
+  )}
+
+  {/* Library teaser */}
+  <section class="wh-wrap wh-section">
+    <SectionHead kicker="03 · Library" title="Books in progress" link="All books" linkHref="/library/" />
+    <div class="wh-grid wh-grid--3">
+      {books.slice(0, 3).map((b) => (
+        <a class="wh-book-card" href={`/${b.slug}/`}>
+          <div class={`wh-book-cover wh-book-cover--${b.cover.mode}`} style={`--cover: ${b.cover.color}`}>
+            {b.cover.mode === 'photo' && b.cover.image && (
+              <WhImage id={b.cover.image} treatment="duotone" ratio="3/4" />
+            )}
+            <div class="wh-book-cover__type">
+              <span class="wh-book-cover__n">{b.n}</span>
+              <span class="wh-book-cover__title">{b.title}</span>
+            </div>
+          </div>
+          <div class="wh-book-card__meta">
+            <span class="wh-kicker">{b.statusLabel}</span>
+            <p>{b.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {/* Hero variant switcher (admin/preview) */}
+  <div class="wh-hero-switch" data-hero-switcher>
+    <span class="wh-hero-switch__label">Hero variant</span>
+    <a href="/?hero=cinematic" class={heroVariant === 'cinematic' ? 'is-active' : ''}>Cinematic</a>
+    <a href="/?hero=editorial" class={heroVariant === 'editorial' ? 'is-active' : ''}>Editorial</a>
+    <a href="/?hero=document" class={heroVariant === 'document' ? 'is-active' : ''}>Document</a>
+  </div>
+</Layout>
+
+<script>
+  // Hero switcher visibility — show only when ?preview=1 or on localhost.
+  const sw = document.querySelector<HTMLElement>('[data-hero-switcher]');
+  if (sw) {
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const isPreview = new URLSearchParams(location.search).has('preview') ||
+                      new URLSearchParams(location.search).has('hero');
+    if (!isLocal && !isPreview) sw.style.display = 'none';
+  }
+</script>

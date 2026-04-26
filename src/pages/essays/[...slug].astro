@@ -1,0 +1,81 @@
+---
+import Layout from '@layouts/Layout.astro';
+import WhImage from '@components/WhImage.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays', ({ data }) => !data.draft);
+  return essays.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+<Layout title={entry.data.title}
+        description={entry.data.dek}
+        active="essays"
+        readingProgress
+        bodyClass="wh-read-page">
+  <article class="wh-read">
+    <header class="wh-read__hero">
+      {entry.data.heroImage && (
+        <div class="wh-read__hero-img">
+          <WhImage id={entry.data.heroImage} treatment={entry.data.heroTreatment ?? 'duotone'} ratio="21/9" loading="eager" />
+        </div>
+      )}
+      <div class="wh-wrap wh-read__hero-inner">
+        <span class="wh-kicker wh-kicker--amber">{entry.data.topic}</span>
+        <h1>{entry.data.title}</h1>
+        {entry.data.dek && <p class="wh-dek">{entry.data.dek}</p>}
+        <div class="wh-read__meta">
+          <span>{entry.data.author}</span>
+          <span>·</span>
+          <span>{fmtDate(entry.data.pubDate)}</span>
+          <span>·</span>
+          <span>{entry.data.readTime} min</span>
+          {entry.data.location && <><span>·</span><span>{entry.data.location}</span></>}
+        </div>
+      </div>
+    </header>
+
+    <div class="wh-wrap wh-read__body">
+      {headings.length > 2 && (
+        <aside class="wh-read__toc" aria-label="Contents">
+          <span class="wh-kicker">Contents</span>
+          <ol>
+            {headings.filter((h) => h.depth <= 3).map((h) => (
+              <li class={`wh-toc-${h.depth}`}><a href={`#${h.slug}`} data-toc>{h.text}</a></li>
+            ))}
+          </ol>
+        </aside>
+      )}
+      <div class="wh-read__prose">
+        <Content />
+        <hr class="wh-read__rule" />
+        <footer class="wh-read__footer">
+          <div class="wh-read__topics">
+            {entry.data.topics.map((t) => <a class="wh-chip" href={`/topics/${t.toLowerCase().replace(/[^a-z0-9]+/g,'-')}/`}>{t}</a>)}
+          </div>
+          <a class="wh-btn wh-btn--ghost" href="/essays/">← All essays</a>
+        </footer>
+      </div>
+    </div>
+  </article>
+
+  <script>
+    // TOC scroll-spy.
+    const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc]');
+    const targets = Array.from(links).map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const i = targets.indexOf(e.target as HTMLElement);
+        if (i < 0) return;
+        links.forEach((a) => a.classList.remove('is-active'));
+        links[i].classList.add('is-active');
+      });
+    }, { rootMargin: '-30% 0px -65% 0px', threshold: 0 });
+    targets.forEach((t) => t && io.observe(t));
+  </script>
+</Layout>

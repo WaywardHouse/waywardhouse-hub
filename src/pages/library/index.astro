@@ -1,0 +1,67 @@
+---
+import Layout from '@layouts/Layout.astro';
+import WhImage from '@components/WhImage.astro';
+import { getCollection } from 'astro:content';
+
+const books = (await getCollection('books')).map((b) => b.data)
+  .sort((a, b) => Number(a.n) - Number(b.n));
+
+const statusOrder = ['flagship', 'active', 'drafting', 'scaffolded', 'companion'] as const;
+const statusLabels: Record<string, string> = {
+  flagship: 'Flagship',
+  active: 'Active',
+  drafting: 'Drafting',
+  scaffolded: 'Scaffolded',
+  companion: 'Companion',
+};
+
+const grouped = statusOrder
+  .map((s) => ({ status: s, label: statusLabels[s], books: books.filter((b) => b.status === s) }))
+  .filter((g) => g.books.length > 0);
+
+const totalBooks = books.length;
+---
+<Layout title="Library" active="library" description="Long-form books on geography, mathematics, data engineering and systems thinking. Built in the open with Quarto.">
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">The Library · {totalBooks} books</span>
+      <h1>Books — long-form, in the open</h1>
+      <p class="wh-dek">Each book is its own Quarto project, deployed independently. Source on GitHub; PDFs and EPUBs alongside the web edition.</p>
+    </header>
+
+    {grouped.map((group) => (
+      <div class="wh-library-group">
+        <div class="wh-library-group__head">
+          <span class="wh-kicker">{group.label}</span>
+        </div>
+        <div class="wh-grid wh-grid--2">
+          {group.books.map((b) => (
+            <a class="wh-book-card wh-book-card--lg" href={`/${b.slug}/`}>
+              <div class={`wh-book-cover wh-book-cover--${b.cover.mode}`} style={`--cover: ${b.cover.color}`}>
+                {b.cover.mode === 'photo' && b.cover.image && (<WhImage id={b.cover.image} treatment="duotone" ratio="3/4" />)}
+                <div class="wh-book-cover__type">
+                  <span class="wh-book-cover__n">{b.n}</span>
+                  <span class="wh-book-cover__title">{b.title}</span>
+                  {b.cover.kicker && <span class="wh-book-cover__kicker">{b.cover.kicker}</span>}
+                </div>
+              </div>
+              <div class="wh-book-card__meta">
+                <span class="wh-kicker">{b.statusLabel}</span>
+                <h2>{b.title}</h2>
+                <p>{b.description}</p>
+                <div class="wh-book-card__topics">
+                  {b.topics.map((t) => <span class="wh-chip wh-chip--sm">{t}</span>)}
+                </div>
+                <div class="wh-book-card__links">
+                  <span>Read →</span>
+                  {b.pdfUrl && <span>· PDF</span>}
+                  <span>· {b.repo}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</Layout>

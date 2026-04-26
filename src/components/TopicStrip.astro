@@ -1,0 +1,17 @@
+---
+interface Props {
+  label?: string;
+  items: { label: string; href?: string }[] | string[];
+}
+const { label = 'Browse by topic', items } = Astro.props;
+const norm = items.map((i) => typeof i === 'string' ? { label: i, href: `/topics/${slug(i)}/` } : i);
+function slug(s: string) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''); }
+---
+<div class="wh-topics">
+  <div class="wh-topics__inner">
+    <span class="wh-topics__label">{label}</span>
+    <div class="wh-topics__list">
+      {norm.map((t) => <a class="wh-chip" href={t.href}>{t.label}</a>)}
+    </div>
+  </div>
+</div>

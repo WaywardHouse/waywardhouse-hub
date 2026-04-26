@@ -1,0 +1,100 @@
+---
+/**
+ * Book chapter SAMPLE page — used to demonstrate the chapter chrome (book
+ * second-tier nav, sticky TOC, scroll-spy, reading progress) for the design
+ * preview. In production, real chapters come from each book's Quarto build
+ * and Cloudflare routes /<slug>/* to that deploy via _redirects.
+ *
+ * This file exists so the design system can show the chapter layout end-to-end
+ * without spinning up a Quarto project.
+ */
+import Layout from '@layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  const out: any[] = [];
+  for (const b of books) {
+    for (const c of b.data.chapters) {
+      out.push({
+        params: { book: b.data.slug, chapter: `ch${c.n}` },
+        props: { book: b.data, chapter: c },
+      });
+    }
+  }
+  return out;
+}
+const { book, chapter } = Astro.props;
+const idx = book.chapters.findIndex((c) => c.n === chapter.n);
+const prev = idx > 0 ? book.chapters[idx - 1] : null;
+const next = idx < book.chapters.length - 1 ? book.chapters[idx + 1] : null;
+---
+<Layout title={`Ch ${chapter.n} — ${chapter.title}`}
+        description={`${book.title} · Chapter ${chapter.n}`}
+        readingProgress
+        bodyClass="wh-read-page wh-book-page"
+        book={{
+          title: book.title,
+          chapter: `Ch. ${chapter.n} · ${chapter.part ?? ''}`.trim(),
+          backHref: `/${book.slug}/`,
+          contentsHref: `/${book.slug}/#contents`,
+          pdfHref: book.pdfUrl,
+          repoHref: `https://github.com/${book.repo}`,
+          activeTab: 'reading',
+        }}>
+  <article class="wh-read wh-chapter">
+    <div class="wh-wrap wh-read__body">
+      <aside class="wh-read__toc wh-read__toc--sticky" aria-label="Chapter contents">
+        <span class="wh-kicker">Contents · {book.title}</span>
+        <ol>
+          {book.chapters.map((c) => (
+            <li class={c.n === chapter.n ? 'is-active' : ''}>
+              <a href={`/${book.slug}/ch${c.n}/`}><span>{c.n}</span> {c.title}</a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+      <div class="wh-read__prose">
+        <header class="wh-chapter__header">
+          <span class="wh-kicker wh-kicker--amber">{chapter.part ?? `Chapter ${chapter.n}`}</span>
+          <h1>{chapter.title}</h1>
+        </header>
+
+        <p>The Quarto build for <em>{book.title}</em> renders chapter HTML under <code>/{book.slug}/</code>. This stub demonstrates the chapter chrome — book navbar above, sticky chapter TOC on the left, reading progress bar at the top, and chapter pagination at the bottom — so you can iterate on chrome and typography without rebuilding the book.</p>
+
+        <h2 id="section-one">Working with messy data</h2>
+        <p>Most of what follows is about building reliable workflows. Coordinates are not numbers — they're agreements about projection and datum. Datasets disagree. The first job of an analyst is to make the disagreements visible, not to hide them.</p>
+
+        <h2 id="section-two">Worked example</h2>
+        <p>Consider a stream-network polyline draped over a 10 m DEM. The DEM was sampled at one resolution, the polyline derived at another, and the cells under the line do not match the line's reported elevation. There is no "right" answer; there is only the answer you choose to defend, and the audit trail you leave behind.</p>
+
+        <h2 id="section-three">Where this leads</h2>
+        <p>The next chapter takes this further into hydrology, where the same disagreements compound into watershed boundaries that move depending on which DEM you used. We will build the pipeline together.</p>
+
+        <nav class="wh-chapter__pager">
+          {prev
+            ? <a href={`/${book.slug}/ch${prev.n}/`} class="wh-chapter__pager-prev"><span class="wh-kicker">← Previous</span><strong>Ch. {prev.n} · {prev.title}</strong></a>
+            : <span></span>}
+          {next
+            ? <a href={`/${book.slug}/ch${next.n}/`} class="wh-chapter__pager-next"><span class="wh-kicker">Next →</span><strong>Ch. {next.n} · {next.title}</strong></a>
+            : <span></span>}
+        </nav>
+      </div>
+    </div>
+  </article>
+  <script>
+    // Highlight current TOC item in the chapter sidebar based on scroll position.
+    const headings = Array.from(document.querySelectorAll<HTMLElement>('.wh-read__prose h2[id]'));
+    const sidebar = document.querySelectorAll<HTMLAnchorElement>('.wh-read__toc--sticky a');
+    if (headings.length && sidebar.length) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            // No-op — sidebar is chapter-level, not heading-level. Hook left here for future.
+          }
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      headings.forEach((h) => io.observe(h));
+    }
+  </script>
+</Layout>

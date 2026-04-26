@@ -1,0 +1,21 @@
+# Cloudflare Pages config — `wrangler pages deploy ./dist`
+# Direct upload mode; no source-build step on Cloudflare side.
+name = "wayward-house"
+compatibility_date = "2025-04-01"
+pages_build_output_dir = "./dist"
+
+# Custom domain is configured in the Cloudflare dashboard:
+#   wayward.house         → Pages project (this one)
+#   www.wayward.house     → 301 → wayward.house
+#
+# Book sub-paths are rewritten by /public/_redirects (see that file). Each
+# book is its own Quarto deploy; the hub does not own their HTML.
+
+[[env.production.routes]]
+pattern = "wayward.house/*"
+zone_name = "wayward.house"
+
+# Web Analytics token (read in Layout.astro).
+[vars]
+PUBLIC_CF_ANALYTICS_TOKEN = "REPLACE_WITH_TOKEN"
+PUBLIC_SITE_URL = "https://wayward.house"
