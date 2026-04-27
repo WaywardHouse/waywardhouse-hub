@@ -79,5 +79,19 @@
     "repo": "WaywardHouse/systems-thinking",
     "deployUrl": "https://wayward.house/systems-thinking/",
     "chapters": []
+  },
+  {
+    "id": "gearlab",
+    "n": "06",
+    "title": "Wayward House Gear Lab",
+    "slug": "gearlab",
+    "status": "active",
+    "statusLabel": "Active · 10 chapters",
+    "description": "Building a digital research lab from the keyboard in front of you — platforms, shell, editors, information management, GitHub, data, analysis environments, and cloud services.",
+    "topics": ["Tooling", "Research workflows", "Data management", "Cloud"],
+    "cover": { "mode": "typographic", "color": "#1a2a1a", "kicker": "Gear Lab" },
+    "repo": "WaywardHouse/waywardhouse-gearlab",
+    "deployUrl": "https://wayward.house/gearlab/",
+    "chapters": []
   }
 ]

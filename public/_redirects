@@ -17,10 +17,13 @@ https://www.wayward.house/*  https://wayward.house/:splat  301!
 /signals/*  https://wh-signals.pages.dev/:splat  200
 
 # ── Books proxy ───────────────────────────────────────────────────────────────
-/learn/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
-/learn/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
-/learn/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
-/learn/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200
-# Uncomment once build completes (~10-15 min):
-/learn/mathematics/*              https://wh-mathematics.pages.dev/:splat              200
-/learn/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
+# No /learn/ prefix — hub library links go to /{slug}/ directly
+/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
+/mathematics/*              https://wh-mathematics.pages.dev/:splat              200
+/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
+/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
+/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
+/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200
+# Legacy /learn/* → drop the prefix (catches any old links)
+/learn/:slug/:rest*         /:slug/:rest*                                        301
+/learn/:slug                /:slug/                                              301
