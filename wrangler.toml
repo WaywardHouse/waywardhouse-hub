@@ -23,12 +23,24 @@ binding       = "DB"
 database_name = "wayward-house-subscribers"
 database_id   = "b83ec748-a8e5-4905-afbd-38cf8dacc47d"
 
+[[env.production.d1_databases]]
+binding       = "DB"
+database_name = "wayward-house-subscribers"
+database_id   = "b83ec748-a8e5-4905-afbd-38cf8dacc47d"
+
 # ── Cloudflare AI ─────────────────────────────────────────────────────────────
 [ai]
 binding = "AI"
 
+[env.production.ai]
+binding = "AI"
+
 # ── Vectorize — site content index ────────────────────────────────────────────
 [[vectorize]]
+binding    = "VECTORIZE"
+index_name = "wh-content"
+
+[[env.production.vectorize]]
 binding    = "VECTORIZE"
 index_name = "wh-content"
 
