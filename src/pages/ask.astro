@@ -6,7 +6,7 @@ import Layout from '@layouts/Layout.astro';
     <header class="wh-page-header wh-pepper-header">
       <div class="wh-pepper-id">
         <div class="wh-pepper-badge">
-          <span class="wh-pepper-nose" aria-hidden="true">🐾</span>
+          <img src="/pepper.jpg" alt="Pepper the Labrador" class="wh-pepper-photo" />
         </div>
         <div>
           <span class="wh-kicker">Archive assistant</span>
@@ -71,12 +71,15 @@ import Layout from '@layouts/Layout.astro';
 .wh-pepper-badge {
   width: 56px;
   height: 56px;
-  background: var(--wh-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.wh-pepper-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .wh-pepper-id h1 { margin: 0; }
@@ -165,7 +168,7 @@ import Layout from '@layouts/Layout.astro';
 .wh-ask__example:hover { border-color: var(--wh-dark); color: var(--wh-dark); }
 </style>
 
-<script>
+<script is:inline>
 (function () {
   const form     = document.getElementById('ask-form');
   const input    = document.getElementById('ask-input');

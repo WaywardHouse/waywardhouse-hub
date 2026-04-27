@@ -1,15 +1,10 @@
 /**
- * POST /api/ask
+ * POST /api/ask  — Pepper, the blind Labrador RAG assistant
  *
- * Body: { question: string }
- *
- * 1. Embeds the question with bge-small-en-v1.5
- * 2. Queries Vectorize for top-5 matching chunks
- * 3. Streams an answer from llama-3.3-70b using retrieved context
- *
- * Bindings required (wrangler.toml):
- *   AI         — Workers AI
+ * Bindings required (wrangler.toml + CF Pages dashboard):
+ *   AI         — Workers AI binding
  *   VECTORIZE  — Vectorize index wh-content
+ *   SITE_URL   — env var
  */
 
 const EMBED_MODEL = '@cf/baai/bge-small-en-v1.5';
@@ -24,103 +19,94 @@ Your voice is warm, direct, and genuinely interested in the subject. You care ab
 
 Answer using ONLY the context passages provided. Be specific — pull actual details, numbers, and place names from the passages. Don't refer to "the context" or "the passages" — just answer as if you know it from memory (which, for a blind dog navigating by smell, you do).`;
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
-
-  // CORS preflight
-  const corsHeaders = {
-    'Access-Control-Allow-Origin':  env.SITE_URL || '*',
+function corsHeaders(env) {
+  return {
+    'Access-Control-Allow-Origin':  env?.SITE_URL || '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const cors = corsHeaders(env);
+
+  // Check bindings are present
+  if (!env.AI)        return Response.json({ error: 'AI binding not configured.'        }, { status: 503, headers: cors });
+  if (!env.VECTORIZE) return Response.json({ error: 'Vectorize binding not configured.' }, { status: 503, headers: cors });
 
   let question;
   try {
     const body = await request.json();
     question   = (body.question || '').trim();
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: corsHeaders });
+    return Response.json({ error: 'Invalid JSON.' }, { status: 400, headers: cors });
   }
 
-  if (!question || question.length < 3) {
-    return new Response(JSON.stringify({ error: 'Question too short.' }), { status: 400, headers: corsHeaders });
-  }
-  if (question.length > 500) {
-    return new Response(JSON.stringify({ error: 'Question too long (max 500 chars).' }), { status: 400, headers: corsHeaders });
-  }
+  if (!question || question.length < 3)  return Response.json({ error: 'Question too short.'            }, { status: 400, headers: cors });
+  if (question.length > 500)             return Response.json({ error: 'Question too long (max 500).'   }, { status: 400, headers: cors });
 
-  // 1. Embed the question
-  const embedRes = await env.AI.run(EMBED_MODEL, { text: [question] });
-  const vector   = embedRes.data[0];
+  try {
+    // 1. Embed the question
+    const embedRes = await env.AI.run(EMBED_MODEL, { text: [question] });
+    const vector   = embedRes.data[0];
 
-  // 2. Query Vectorize
-  const queryRes  = await env.VECTORIZE.query(vector, { topK: TOP_K, returnMetadata: 'all' });
-  const matches   = queryRes.matches || [];
+    // 2. Query Vectorize
+    const queryRes = await env.VECTORIZE.query(vector, { topK: TOP_K, returnMetadata: 'all' });
+    const matches  = (queryRes.matches || []);
 
-  if (matches.length === 0) {
-    return new Response(
-      JSON.stringify({ answer: "I don't have enough information on that topic in the Wayward House archive yet." }),
-      { headers: { 'Content-Type': 'application/json', ...corsHeaders } }
-    );
-  }
-
-  // 3. Build context block
-  const context_text = matches
-    .map((m, i) => {
-      const { title, text, url } = m.metadata || {};
-      return `[${i + 1}] "${title}"\n${text}`;
-    })
-    .join('\n\n---\n\n');
-
-  const sources = [...new Map(
-    matches.map(m => [m.metadata?.slug, { title: m.metadata?.title, url: m.metadata?.url }])
-  ).values()];
-
-  // 4. Stream LLM response
-  const messages = [
-    { role: 'system',    content: SYSTEM_PROMPT },
-    { role: 'user',      content: `Context:\n\n${context_text}\n\n---\n\nQuestion: ${question}` },
-  ];
-
-  const stream = await env.AI.run(LLM_MODEL, { messages, stream: true });
-
-  // Wrap the AI stream to append sources as a final SSE event
-  const { readable, writable } = new TransformStream();
-  const writer = writable.getWriter();
-  const encoder = new TextEncoder();
-
-  (async () => {
-    const reader = stream.getReader();
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        await writer.write(value);
-      }
-      // Append sources as a final custom event
-      const sourcesEvent = `\ndata: ${JSON.stringify({ sources })}\n\n`;
-      await writer.write(encoder.encode(sourcesEvent));
-    } finally {
-      await writer.close();
+    if (matches.length === 0) {
+      return Response.json(
+        { answer: "My nose isn't picking that up in the archive. Try asking about Alberta geography, energy, or trade." },
+        { headers: cors }
+      );
     }
-  })();
 
-  return new Response(readable, {
-    headers: {
-      'Content-Type':  'text/event-stream',
-      'Cache-Control': 'no-cache',
-      ...corsHeaders,
-    },
-  });
+    // 3. Build context
+    const contextText = matches
+      .map((m, i) => `[${i + 1}] "${m.metadata?.title}"\n${m.metadata?.text}`)
+      .join('\n\n---\n\n');
+
+    const sources = [...new Map(
+      matches.map(m => [m.metadata?.slug, { title: m.metadata?.title, url: m.metadata?.url }])
+    ).values()];
+
+    // 4. Stream LLM
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user',   content: `Context:\n\n${contextText}\n\n---\n\nQuestion: ${question}` },
+    ];
+
+    const aiStream = await env.AI.run(LLM_MODEL, { messages, stream: true });
+
+    const { readable, writable } = new TransformStream();
+    const writer  = writable.getWriter();
+    const encoder = new TextEncoder();
+
+    (async () => {
+      const reader = aiStream.getReader();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          await writer.write(value);
+        }
+        await writer.write(encoder.encode(`\ndata: ${JSON.stringify({ sources })}\n\n`));
+      } finally {
+        await writer.close();
+      }
+    })();
+
+    return new Response(readable, {
+      headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', ...cors },
+    });
+
+  } catch (err) {
+    console.error('ask error:', err);
+    return Response.json({ error: 'Something went wrong. Try again.' }, { status: 500, headers: cors });
+  }
 }
 
 export async function onRequestOptions(context) {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin':  context.env.SITE_URL || '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+  return new Response(null, { status: 204, headers: corsHeaders(context.env) });
 }
