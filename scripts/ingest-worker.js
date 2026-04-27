@@ -60,11 +60,27 @@ function chunkText(text) {
 
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url);
-    const dry = url.searchParams.has('dry');
+    const url   = new URL(request.url);
+    const dry   = url.searchParams.has('dry');
+    const slugParam = url.searchParams.get('slug'); // e.g. ?slug=fire-country
+
+    if (url.pathname === '/list') {
+      const lines = content.map(({ type, slug }) => `${type}/${slug}`);
+      return new Response(lines.join('\n') + '\n');
+    }
 
     if (url.pathname !== '/ingest') {
-      return new Response('GET /ingest or GET /ingest?dry=1\n');
+      return new Response(
+        'GET /list\nGET /ingest?slug=<slug>\nGET /ingest?slug=<slug>&dry=1\n'
+      );
+    }
+
+    const items = slugParam
+      ? content.filter(c => c.slug === slugParam)
+      : content;
+
+    if (items.length === 0) {
+      return new Response(`No content found for slug: ${slugParam}\n`, { status: 404 });
     }
 
     const log     = [];
@@ -77,7 +93,7 @@ export default {
       pending = [];
     }
 
-    for (const { type, slug, url: itemUrl, raw } of content) {
+    for (const { type, slug, url: itemUrl, raw } of items) {
       const title  = extractTitle(raw) || slug;
       const body   = stripFrontMatter(raw);
       const chunks = chunkText(body);
