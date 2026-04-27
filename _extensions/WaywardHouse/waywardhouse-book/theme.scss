@@ -681,3 +681,114 @@ pre code {
     inset: auto 0.75rem 0.75rem auto;
   }
 }
+
+/* ── 10. SCROLLYTELLING  (.story-section / .story-sticky / .story-steps)
+   ══════════════════════════════════════════════════════════════════════════
+   Classic Scrollama "overlay" pattern:
+     - .story-sticky pins the map to the viewport while .story-steps scrolls
+     - .story-steps is pulled up via negative margin to overlap the sticky panel
+     - Individual .story-step cards float over the map with a readable background
+     - Scroll triggers fire at mid-viewport; IntersectionObserver in core.js
+       dispatches story:step → updateMap()/updateLeaflet() on each step enter
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Outer section — height is determined by .story-steps content */
+.story-section {
+  position: relative;
+  margin-block: 3rem;
+}
+
+/* Sticky panel — map/viz pins here while steps scroll past */
+.story-sticky {
+  position:   sticky;
+  top:        var(--wh-nav-h);
+  height:     calc(100vh - var(--wh-nav-h));
+  overflow:   hidden;
+  background: var(--wh-rule);   /* placeholder colour while map loads */
+  z-index:    0;
+}
+
+/* Graphic wrapper — fills the sticky panel exactly */
+.story-graphic {
+  width:  100%;
+  height: 100%;
+}
+
+/* Force any direct-child viz / map container to fill the graphic panel */
+.story-graphic > div {
+  width:   100% !important;
+  height:  100% !important;
+}
+
+/* Leaflet container needs explicit height via the parent */
+.story-graphic .leaflet-container {
+  height: 100%;
+}
+
+/* Steps column — overlaps the sticky panel by pulling up via negative margin */
+.story-steps {
+  position:       relative;
+  z-index:        10;
+  margin-top:     calc(-100vh + var(--wh-nav-h));
+  padding-bottom: 30vh;          /* lets the last step scroll fully into view */
+}
+
+/* Individual step card */
+.story-step {
+  max-width:    38ch;
+  margin-left:  auto;
+  margin-right: 2rem;
+  margin-bottom: 60vh;           /* gap between steps = scroll travel distance */
+  padding:      1.25rem 1.5rem;
+  background:   rgba(248, 248, 244, 0.92);
+  backdrop-filter: blur(4px);
+  border-left:  3px solid var(--wh-red);
+  font-size:    0.95rem;
+  line-height:  1.65;
+  pointer-events: all;
+}
+
+/* First step — top margin gives a clear view of the map before first trigger */
+.story-step:first-child { margin-top: 30vh; }
+
+/* Last step — no extra bottom gap (padding-bottom on steps handles exit) */
+.story-step:last-child  { margin-bottom: 0; }
+
+/* Remove bottom margin on final paragraph inside a step */
+.story-step p:last-child { margin-bottom: 0; }
+
+/* Active step — slightly more opaque for readability */
+.story-step[data-active] {
+  background: rgba(248, 248, 244, 0.97);
+}
+
+/* Pointer-events: none on the steps column so map remains interactive
+   between steps; the step card re-enables events via pointer-events: all */
+.story-steps {
+  pointer-events: none;
+}
+
+/* ── Mobile: un-stick the map, stack vertically ─────────────────────────── */
+@media (max-width: 767px) {
+  .story-sticky {
+    position:   relative;
+    top:        auto;
+    height:     56vw;
+    min-height: 260px;
+  }
+
+  .story-steps {
+    margin-top:     0;
+    padding-bottom: 0;
+    pointer-events: all;
+  }
+
+  .story-step {
+    max-width:    100%;
+    margin-left:  0;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .story-step:first-child { margin-top: 1rem; }
+}
