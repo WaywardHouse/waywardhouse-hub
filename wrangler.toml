@@ -3,20 +3,13 @@ name = "wayward-house"
 compatibility_date = "2025-04-01"
 pages_build_output_dir = "./dist"
 
-# ── Public env vars ───────────────────────────────────────────────────────────
+# Analytics and Site URLs
 [vars]
 PUBLIC_CF_ANALYTICS_TOKEN = "REPLACE_WITH_TOKEN"
-PUBLIC_SITE_URL           = "https://wayward.house"
-SITE_URL                  = "https://wayward.house"
-FROM_EMAIL                = "WaywardHouse <newsletter@wayward.house>"
-RESEND_AUDIENCE_ID        = "20be979e-41b9-4d71-a327-b7f4a9fef027"
+PUBLIC_SITE_URL = "https://wayward.house"
 
-# RESEND_API_KEY is a secret — do NOT add it here.
-# Set it with: wrangler pages secret put RESEND_API_KEY --project-name wayward-house
-# Or via the CF dashboard: Pages → wayward-house → Settings → Environment variables → Add secret
+[env.production.vars]
+PUBLIC_CF_ANALYTICS_TOKEN = "62c47d78bf9d4c80972d4e6242d79ff8"
+PUBLIC_SITE_URL = "https://wayward.house"
 
-# ── D1 database — subscriber list ─────────────────────────────────────────────
-[[d1_databases]]
-binding       = "DB"
-database_name = "wayward-house-subscribers"
-database_id   = "b83ec748-a8e5-4905-afbd-38cf8dacc47d"
+
