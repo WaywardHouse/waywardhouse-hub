@@ -7,27 +7,63 @@
  *   node scripts/build-content-bundle.js
  */
 
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dir  = dirname(fileURLToPath(import.meta.url));
 const root   = join(__dir, '..');
 
-const SOURCES = [
+// ── Flat .qmd sources (essays/, signals/) ─────────────────────────────────────
+const FLAT_SOURCES = [
   { dir: join(root, '../wh-essays/essays'),  type: 'essay',  urlPrefix: 'https://wayward.house/essays/' },
   { dir: join(root, '../wh-signals/signals'), type: 'signal', urlPrefix: 'https://wayward.house/signals/' },
 ];
 
+// ── Nested sources: essays/<dir>/essay.qmd ────────────────────────────────────
+const NESTED_SOURCES = [
+  {
+    dir:     join(root, '../computational-geography-lab/essays'),
+    type:    'model',
+    // URL: permalink from front matter, else /computational-geography/<dir>/
+    urlBase: 'https://wayward.house/computational-geography',
+  },
+];
+
+function extractPermalink(raw) {
+  const m = raw.match(/^permalink:\s*["']?(.+?)["']?\s*$/m);
+  return m ? m[1].trim() : null;
+}
+
 const items = [];
 
-for (const { dir, type, urlPrefix } of SOURCES) {
+// Flat sources
+for (const { dir, type, urlPrefix } of FLAT_SOURCES) {
   const files = readdirSync(dir).filter(f => f.endsWith('.qmd') && f !== 'index.qmd');
   for (const file of files) {
     const slug = file.replace('.qmd', '');
     const raw  = readFileSync(join(dir, file), 'utf8');
     items.push({ type, slug, url: urlPrefix + slug, raw });
     process.stdout.write(`  ${type}/${slug}\n`);
+  }
+}
+
+// Nested sources (dir/essay.qmd)
+for (const { dir, type, urlBase } of NESTED_SOURCES) {
+  const subdirs = readdirSync(dir).filter(d => statSync(join(dir, d)).isDirectory());
+  for (const subdir of subdirs.sort()) {
+    const qmd = join(dir, subdir, 'essay.qmd');
+    try {
+      const raw       = readFileSync(qmd, 'utf8');
+      const permalink = extractPermalink(raw);
+      const url       = permalink
+        ? `${urlBase}${permalink}`                         // e.g. /alberta-renewable-resource-geography/
+        : `${urlBase}/${subdir}/`;                        // fallback for unpublished
+      items.push({ type, slug: subdir, url, raw });
+      process.stdout.write(`  ${type}/${subdir}\n`);
+    } catch {
+      process.stdout.write(`  SKIP ${subdir} (no essay.qmd)\n`);
+    }
   }
 }
 

@@ -19,6 +19,49 @@ Your voice is warm, direct, and genuinely interested in the subject. You care ab
 
 Answer using ONLY the context passages provided. Be specific — pull actual details, numbers, and place names from the passages. Don't refer to "the context" or "the passages" — just answer as if you know it from memory (which, for a blind dog navigating by smell, you do).`;
 
+// ── Easter egg responses ────────────────────────────────────────────────────
+const EASTER_EGGS = [
+  {
+    match: q => /\bare you (blind|a dog|a lab|a labrador)\b/.test(q) || /can you see/.test(q),
+    reply: `Yes, completely blind since I was a pup. I don't miss it much — my nose more than compensates. The archive smells extraordinary, actually. Every essay has its own scent profile.`,
+  },
+  {
+    match: q => /\bdo you (like|love|enjoy) (treats|food|fetch|swimming|walks)\b/.test(q) || /\bgood (girl|dog|boy)\b/.test(q),
+    reply: `Treats, always. Though right now I'm more interested in your question. What did you want to know about geography?`,
+  },
+  {
+    match: q => /\bwhat.s your (name|breed)\b/.test(q) || /\bwho are you\b/.test(q) || /\bare you a (dog|labrador|lab)\b/.test(q),
+    reply: `I'm Pepper — a blind Labrador, archive assistant, and enthusiastic geographer. I navigate the Wayward House archive entirely by smell. Ask me something about Alberta, energy, trade, or the environment and my nose will do the rest.`,
+  },
+  {
+    match: q => /\bdo you (have|own|use) (eyes|glasses|a cane|a guide)\b/.test(q),
+    reply: `No eyes that work, no cane. Just a very good nose. It turns out smell is a perfectly adequate way to navigate an archive. Better, maybe — I never get distracted by the typography.`,
+  },
+  {
+    match: q => /\bwhat do you smell\b/.test(q) || /\bwhat does .* smell like\b/.test(q),
+    reply: `The archive? It's mostly Alberta — bitumen and pine and high-altitude cold. There's a streak of Pacific salt air through the trade essays. The pipeline series smells like steel and diesel. The wildfire essays are unmistakable. What are you curious about?`,
+  },
+  {
+    match: q => /\bhow old are you\b/.test(q) || /\bwhen were you born\b/.test(q),
+    reply: `Old enough to know the archive well, young enough to still run to the door when a new essay arrives. Pepper doesn't count years — she counts smells.`,
+  },
+  {
+    match: q => /\bdo you have a (owner|human|writer|boss|person)\b/.test(q) || /\bwho (owns|feeds|walks) you\b/.test(q),
+    reply: `The writer at Wayward House. He keeps the archive well-stocked, which is all I really need from a human. Good essays and the occasional ear scratch.`,
+  },
+  {
+    match: q => /\b(bark|woof|arf|ruff)\b/.test(q),
+    reply: `I'm not that kind of dog. Ask me about pipeline capacity or wildfire risk and I'll be much more useful.`,
+  },
+];
+
+function matchEasterEgg(q) {
+  for (const egg of EASTER_EGGS) {
+    if (egg.match(q)) return egg.reply;
+  }
+  return null;
+}
+
 function corsHeaders(env) {
   return {
     'Access-Control-Allow-Origin':  env?.SITE_URL || '*',
@@ -45,6 +88,26 @@ export async function onRequestPost(context) {
 
   if (!question || question.length < 3)  return Response.json({ error: 'Question too short.'            }, { status: 400, headers: cors });
   if (question.length > 500)             return Response.json({ error: 'Question too long (max 500).'   }, { status: 400, headers: cors });
+
+  // ── Easter eggs — answered before RAG ─────────────────────────────────────
+  const q = question.toLowerCase();
+  const easterEgg = matchEasterEgg(q);
+  if (easterEgg) {
+    const encoder = new TextEncoder();
+    const stream  = new ReadableStream({
+      start(controller) {
+        for (const word of easterEgg.split(' ')) {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ response: word + ' ' })}\n\n`));
+        }
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ sources: [] })}\n\n`));
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+        controller.close();
+      },
+    });
+    return new Response(stream, {
+      headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', ...cors },
+    });
+  }
 
   try {
     // 1. Embed the question
