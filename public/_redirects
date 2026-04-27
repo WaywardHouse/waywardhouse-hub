@@ -3,27 +3,42 @@
 https://www.wayward.house/*  https://wayward.house/:splat  301!
 
 # ── Old URL continuity (301 permanent) ────────────────────────────────────────
-# These can go live immediately — destination doesn't need to exist yet.
-# Old signal slugs → new issue-NNN path
-/articles/system-signals-001*  /signals/issue-001/  301
-/articles/system-signals-002*  /signals/issue-002/  301
-/articles/system-signals-003*  /signals/issue-003/  301
-/articles/system-signals-004*  /signals/issue-004/  301
+/articles/system-signals-001*  /signals/issue-001  301
+/articles/system-signals-002*  /signals/issue-002  301
+/articles/system-signals-003*  /signals/issue-003  301
+/articles/system-signals-004*  /signals/issue-004  301
 # All other /articles/* → /essays/*
-/articles/:slug  /essays/:slug/  301
+/articles/:slug  /essays/:slug  301
 
-# ── Essays + Signals proxy (200 = transparent proxy) ─────────────────────────
-/essays/*   https://wh-essays.pages.dev/:splat   200
-/signals/*  https://wh-signals.pages.dev/:splat  200
+# ── Essays proxy ──────────────────────────────────────────────────────────────
+# Rule 1: strip trailing slash from slug before forwarding (CF Pages 308 quirk)
+/essays/:slug/  https://wh-essays.pages.dev/:slug  200
+# Rule 2: index + no-trailing-slash slugs
+/essays/*       https://wh-essays.pages.dev/:splat  200
+
+# ── Signals proxy ─────────────────────────────────────────────────────────────
+/signals/:slug/  https://wh-signals.pages.dev/:slug  200
+/signals/*       https://wh-signals.pages.dev/:splat  200
 
 # ── Books proxy ───────────────────────────────────────────────────────────────
-# No /learn/ prefix — hub library links go to /{slug}/ directly
-/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
-/mathematics/*              https://wh-mathematics.pages.dev/:splat              200
-/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
-/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
-/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
-/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200
-# Legacy /learn/* → drop the prefix (catches any old links)
-/learn/:slug/:rest*         /:slug/:rest*                                        301
-/learn/:slug                /:slug/                                              301
+/computational-geography/:slug/  https://wh-computational-geography.pages.dev/:slug  200
+/computational-geography/*       https://wh-computational-geography.pages.dev/:splat  200
+
+/mathematics/:slug/  https://wh-mathematics.pages.dev/:slug  200
+/mathematics/*       https://wh-mathematics.pages.dev/:splat  200
+
+/math-for-data-science-ai/:slug/  https://wh-math-ds-ai.pages.dev/:slug  200
+/math-for-data-science-ai/*       https://wh-math-ds-ai.pages.dev/:splat  200
+
+/data-engineering/:slug/  https://wh-data-engineering.pages.dev/:slug  200
+/data-engineering/*       https://wh-data-engineering.pages.dev/:splat  200
+
+/systems-thinking/:slug/  https://wh-systems-thinking.pages.dev/:slug  200
+/systems-thinking/*       https://wh-systems-thinking.pages.dev/:splat  200
+
+/gearlab/:slug/  https://wh-gearlab.pages.dev/:slug  200
+/gearlab/*       https://wh-gearlab.pages.dev/:splat  200
+
+# Legacy /learn/* → drop the prefix
+/learn/:slug/:rest*  /:slug/:rest*  301
+/learn/:slug         /:slug/        301
