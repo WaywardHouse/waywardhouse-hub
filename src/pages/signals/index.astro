@@ -21,9 +21,11 @@ const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day
         <h2>One issue a month. No tracking.</h2>
         <p>Plain-text email, no algorithmic inbox tricks. Unsubscribe with one click.</p>
       </div>
-      <form class="wh-subscribe__form" action="https://buttondown.email/api/emails/embed-subscribe/wayward-house" method="post" target="_blank">
+      <form class="wh-subscribe__form" id="signals-sub-form" novalidate>
+        <input type="hidden" name="source" value="signals-page" />
         <input type="email" name="email" placeholder="you@domain" required />
         <button type="submit" class="wh-btn wh-btn--amber">Subscribe →</button>
+        <p class="wh-subscribe__status" id="signals-sub-status" role="status" aria-live="polite"></p>
       </form>
     </div>
 
@@ -44,3 +46,56 @@ const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day
     </ol>
   </section>
 </Layout>
+
+<script>
+(function () {
+  const form   = document.getElementById('signals-sub-form');
+  const status = document.getElementById('signals-sub-status');
+  const submit = form?.querySelector('button[type="submit"]');
+  if (!form || !status || !submit) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (form.querySelector('input[name="email"]')?.value || '').trim();
+    if (!email) return;
+
+    const orig         = submit.textContent;
+    submit.disabled    = true;
+    submit.textContent = 'Subscribing…';
+    status.textContent = '';
+
+    try {
+      const res  = await fetch('/api/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, source: 'signals-page' }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        if (data.message === 'already_subscribed') {
+          status.textContent  = "Already subscribed — check your inbox.";
+          status.dataset.tone = 'success';
+          submit.textContent  = orig;
+          submit.disabled     = false;
+        } else {
+          status.textContent  = 'Check your inbox for the confirmation email.';
+          status.dataset.tone = 'success';
+          form.querySelector('input[name="email"]').value = '';
+          submit.textContent = 'Sent ✓';
+        }
+      } else {
+        status.textContent  = data.error || 'Something went wrong. Please try again.';
+        status.dataset.tone = 'error';
+        submit.textContent  = orig;
+        submit.disabled     = false;
+      }
+    } catch {
+      status.textContent  = 'Network error. Please try again.';
+      status.dataset.tone = 'error';
+      submit.textContent  = orig;
+      submit.disabled     = false;
+    }
+  });
+})();
+</script>

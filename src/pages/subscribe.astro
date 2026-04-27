@@ -1,0 +1,122 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Subscribe" description="System Signals and new Wayward House essays, delivered by email. Plain text, no tracking, unsubscribe any time.">
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Subscribe</span>
+      <h1>Keep up with systems, not noise.</h1>
+      <p class="wh-dek">System Signals plus a note when a new long-form essay publishes. No tracking pixels. No ad networks. Unsubscribe any time.</p>
+    </header>
+
+    <div class="wh-subscribe-page">
+      <div class="wh-subscribe-page__what">
+        <h2>What you get</h2>
+        <ul class="wh-subscribe-page__list">
+          <li>
+            <strong>System Signals</strong>
+            <span>A regular digest of the signals worth watching — Alberta economics, energy transition, trade geography, and the mechanics behind the numbers.</span>
+          </li>
+          <li>
+            <strong>New essays</strong>
+            <span>A short note when a new long-form piece publishes on the site.</span>
+          </li>
+        </ul>
+        <p><a href="/signals/" class="wh-link">Browse past issues →</a></p>
+      </div>
+
+      <div class="wh-subscribe-page__form-wrap">
+        <form class="wh-sub-form" id="subscribe-form" novalidate>
+          <input type="hidden" name="source" value="subscribe-page" />
+          <label for="sub-email" class="wh-sub-form__label">Email address</label>
+          <div class="wh-sub-form__row">
+            <input
+              type="email"
+              id="sub-email"
+              name="email"
+              class="wh-sub-form__input"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+            <button type="submit" class="wh-btn wh-btn--red">Subscribe</button>
+          </div>
+          <p class="wh-sub-form__status" id="sub-status" role="status" aria-live="polite"></p>
+          <p class="wh-sub-form__note">One confirmation email. Unsubscribe any time. <a href="/privacy/" class="wh-link">Privacy policy →</a></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+(function () {
+  const form   = document.getElementById('subscribe-form');
+  const status = document.getElementById('sub-status');
+  const submit = form?.querySelector('button[type="submit"]');
+  if (!form || !status || !submit) return;
+
+  // Show URL error params (e.g. ?error=expired from a confirmation link)
+  const params = new URLSearchParams(window.location.search);
+  const err    = params.get('error');
+  if (err) {
+    const msgs = {
+      invalid: "That confirmation link isn't valid. Please subscribe again.",
+      expired: "That confirmation link has expired (7 days). Please subscribe again.",
+    };
+    status.textContent  = msgs[err] || 'Something went wrong. Please try again.';
+    status.dataset.tone = 'error';
+  }
+
+  const emailParam = params.get('email');
+  if (emailParam) {
+    const input = form.querySelector('input[name="email"]');
+    if (input) input.value = decodeURIComponent(emailParam);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (form.querySelector('input[name="email"]')?.value || '').trim();
+    if (!email) return;
+
+    const orig         = submit.textContent;
+    submit.disabled    = true;
+    submit.textContent = 'Subscribing…';
+    status.textContent = '';
+    delete status.dataset.tone;
+
+    try {
+      const res  = await fetch('/api/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, source: 'subscribe-page' }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        if (data.message === 'already_subscribed') {
+          status.textContent  = "You're already subscribed — check your inbox for issues.";
+          status.dataset.tone = 'success';
+          submit.textContent  = orig;
+          submit.disabled     = false;
+        } else {
+          status.textContent  = 'Done — check your inbox for the confirmation email.';
+          status.dataset.tone = 'success';
+          form.querySelector('input[name="email"]').value = '';
+          submit.textContent = 'Sent ✓';
+        }
+      } else {
+        status.textContent  = data.error || 'Something went wrong. Please try again.';
+        status.dataset.tone = 'error';
+        submit.textContent  = orig;
+        submit.disabled     = false;
+      }
+    } catch {
+      status.textContent  = 'Network error. Please try again.';
+      status.dataset.tone = 'error';
+      submit.textContent  = orig;
+      submit.disabled     = false;
+    }
+  });
+})();
+</script>
