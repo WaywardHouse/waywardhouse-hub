@@ -1,6 +1,12 @@
+/*-- scss:defaults --*/
+
 /*
  * Wayward House — Quarto book theme
  * Layered on top of the cosmo Bootstrap base.
+ *
+ * Quarto SCSS layer structure:
+ *   scss:defaults  — Bootstrap variable overrides (fonts, colours)
+ *   scss:rules     — All CSS rules
  *
  * Design rules (from CLAUDE.md):
  *   - No border-radius anywhere
@@ -12,8 +18,27 @@
  *   - No client-side JS beyond Quarto defaults + sidebar persist
  */
 
+// ── Bootstrap SCSS variable overrides ────────────────────────────────────
+// These are picked up by the cosmo base before compilation.
+$font-family-sans-serif: 'Barlow', Arial, sans-serif !default;
+$font-family-monospace:  'IBM Plex Mono', 'Courier New', monospace !default;
+$font-size-base:          1rem !default;
+$line-height-base:        1.65 !default;
+$body-bg:                 #f8f8f4 !default;
+$body-color:              #1c1c1a !default;
+$link-color:              #e02020 !default;
+$link-hover-color:        #b81818 !default;
+$border-radius:           0 !default;   // no radius anywhere
+$border-radius-sm:        0 !default;
+$border-radius-lg:        0 !default;
+$border-radius-pill:      0 !default;
+// Suppress Bootstrap box-shadow system-wide
+$box-shadow:              none !default;
+$box-shadow-sm:           none !default;
+$box-shadow-lg:           none !default;
+
 /* ═══════════════════════════════════════════════════════════════════════════
-   1. DESIGN TOKENS
+   1. DESIGN TOKENS  (CSS custom properties — live in :root)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -41,6 +66,8 @@
   --wh-max:    1280px;
   --wh-gutter: clamp(1rem, 2.5vw, 2rem);
 }
+
+/*-- scss:rules --*/
 
 /* ═══════════════════════════════════════════════════════════════════════════
    2. RESET QUARTO/BOOTSTRAP CHROME WE DON'T WANT
