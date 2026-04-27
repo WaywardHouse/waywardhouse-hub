@@ -208,7 +208,7 @@
   margin: 0;
   max-width: 26rem;
   font-size: 0.85rem;
-  color: #6a6a64;
+  color: #9a9a94;
 }
 .wh-ftr__coords {
   margin-top: 1rem;
@@ -216,7 +216,7 @@
   font-size: 0.66rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #3a3a36;
+  color: #686864;
 }
 .wh-ftr__col h2 {
   margin: 0 0 0.8rem;
@@ -230,7 +230,7 @@
   display: block;
   padding: 0.22rem 0;
   font-size: 0.85rem;
-  color: #7a7a74;
+  color: #a8a8a2;
 }
 .wh-ftr__col a:hover { color: var(--wh-white); }
 .wh-ftr__base {
@@ -243,7 +243,7 @@
   font-size: 0.65rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #3a3a36;
+  color: #686864;
 }
 
 /* ── Primitives ─────────────────────────────────────────────────────────── */
