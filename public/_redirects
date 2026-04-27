@@ -13,17 +13,14 @@ https://www.wayward.house/*  https://wayward.house/:splat  301!
 /articles/:slug  /essays/:slug/  301
 
 # ── Essays + Signals proxy (200 = transparent proxy) ─────────────────────────
-# Uncomment each line once the CF Pages project is live and verified.
-# /essays/*   https://wh-essays.pages.dev/:splat   200
-# /signals/*  https://wh-signals.pages.dev/:splat  200
+/essays/*   https://wh-essays.pages.dev/:splat   200
+/signals/*  https://wh-signals.pages.dev/:splat  200
 
 # ── Books proxy ───────────────────────────────────────────────────────────────
-# CF Pages project names match deploy.yml --project-name flags.
-# Uncomment each line once the project is live and verified at <slug>.pages.dev.
-#
-# /learn/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
+/learn/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
+/learn/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
+/learn/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
+/learn/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200
+# Uncomment once build completes (~10-15 min):
 # /learn/mathematics/*              https://wh-mathematics.pages.dev/:splat              200
-# /learn/math-for-data-science-ai/* https://wh-math-ds-ai.pages.dev/:splat              200
-# /learn/data-engineering/*         https://wh-data-engineering.pages.dev/:splat        200
-# /learn/systems-thinking/*         https://wh-systems-thinking.pages.dev/:splat        200
-# /learn/gearlab/*                  https://wh-gearlab.pages.dev/:splat                 200
+# /learn/computational-geography/*  https://wh-computational-geography.pages.dev/:splat  200
