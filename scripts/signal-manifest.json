@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "issue-001",
+    "binding": "SIGNAL_ISSUE_001"
+  },
+  {
+    "slug": "issue-002",
+    "binding": "SIGNAL_ISSUE_002"
+  },
+  {
+    "slug": "issue-003",
+    "binding": "SIGNAL_ISSUE_003"
+  },
+  {
+    "slug": "issue-004",
+    "binding": "SIGNAL_ISSUE_004"
+  }
+]
