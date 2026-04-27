@@ -3,13 +3,28 @@ name = "wayward-house"
 compatibility_date = "2025-04-01"
 pages_build_output_dir = "./dist"
 
-# Analytics and Site URLs
 [vars]
 PUBLIC_CF_ANALYTICS_TOKEN = "REPLACE_WITH_TOKEN"
-PUBLIC_SITE_URL = "https://wayward.house"
+PUBLIC_SITE_URL            = "https://wayward.house"
+SITE_URL                   = "https://wayward.house"
+FROM_EMAIL                 = "WaywardHouse <newsletter@wayward.house>"
+RESEND_AUDIENCE_ID         = "20be979e-41b9-4d71-a327-b7f4a9fef027"
 
 [env.production.vars]
 PUBLIC_CF_ANALYTICS_TOKEN = "62c47d78bf9d4c80972d4e6242d79ff8"
-PUBLIC_SITE_URL = "https://wayward.house"
+PUBLIC_SITE_URL            = "https://wayward.house"
+SITE_URL                   = "https://wayward.house"
+FROM_EMAIL                 = "WaywardHouse <newsletter@wayward.house>"
+RESEND_AUDIENCE_ID         = "20be979e-41b9-4d71-a327-b7f4a9fef027"
+
+# ── D1 database — subscriber list ─────────────────────────────────────────────
+[[d1_databases]]
+binding       = "DB"
+database_name = "wayward-house-subscribers"
+database_id   = "b83ec748-a8e5-4905-afbd-38cf8dacc47d"
+
+# ── Secrets (never stored here) ───────────────────────────────────────────────
+# RESEND_API_KEY — set with:
+# wrangler pages secret put RESEND_API_KEY --project-name wayward-house
 
 
