@@ -28,9 +28,31 @@ const PROXY_ROUTES = [
   { prefix: '/gearlab/',                 backend: 'https://wh-gearlab.pages.dev',                hubOwnsRoot: false },
 ];
 
+// Legacy /learn/<slug> paths — redirect to the canonical path without the prefix.
+// These rules live here (not _redirects) because the catch-all Function intercepts
+// all requests before _redirects is evaluated.
+const LEARN_REDIRECT_MAP = {
+  '/learn/computational-geography': '/computational-geography',
+  '/learn/mathematics':             '/mathematics',
+  '/learn/math-for-data-science-ai': '/math-for-data-science-ai',
+  '/learn/data-engineering':        '/data-engineering',
+  '/learn/systems-thinking':        '/systems-thinking',
+  '/learn/gearlab':                 '/gearlab',
+};
+
 export async function onRequest(context) {
   const url  = new URL(context.request.url);
   const path = url.pathname;
+
+  // /learn/<slug>[/...] → /<slug>[/...]
+  if (path.startsWith('/learn/')) {
+    for (const [from, to] of Object.entries(LEARN_REDIRECT_MAP)) {
+      if (path === from || path === from + '/' || path.startsWith(from + '/')) {
+        const rest = path.slice(from.length); // '' | '/' | '/chapter/...'
+        return Response.redirect(url.origin + to + rest + (url.search || ''), 301);
+      }
+    }
+  }
 
   for (const { prefix, backend, hubOwnsRoot } of PROXY_ROUTES) {
     const base = prefix.slice(0, -1); // '/essays/' → '/essays'
