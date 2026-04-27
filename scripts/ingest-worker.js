@@ -1,46 +1,33 @@
 /**
  * Wayward House — vector ingest Worker
  *
- * Runs locally via wrangler dev; uses native AI + Vectorize bindings.
+ * Deploy temporarily, trigger via HTTP, then delete.
  *
- * Usage:
- *   npx wrangler dev scripts/ingest-worker.js --config scripts/wrangler.ingest.toml
- *
- * Then in another terminal:
- *   curl http://localhost:8787/ingest          # ingest all content
- *   curl http://localhost:8787/ingest?dry=1    # dry run (counts only)
- *   curl http://localhost:8787/clear           # delete all vectors first (re-index)
- *
- * Content is read from the sibling repos at build time and bundled by wrangler.
- * See wrangler.ingest.toml for the text_blobs bindings.
+ *   node scripts/build-content-bundle.js          # bundle .qmd content
+ *   npx wrangler deploy --config scripts/wrangler.ingest.toml
+ *   curl https://wh-ingest.<subdomain>.workers.dev/ingest?dry=1
+ *   curl https://wh-ingest.<subdomain>.workers.dev/ingest
+ *   npx wrangler delete --name wh-ingest
  */
 
-const EMBED_MODEL  = '@cf/baai/bge-small-en-v1.5';
-const CHUNK_SIZE   = 1500;   // chars (~375 tokens)
-const CHUNK_OVERLAP = 200;   // chars overlap between chunks
-const EMBED_BATCH  = 10;     // texts per AI.run call
-const UPSERT_BATCH = 100;    // vectors per VECTORIZE.upsert call
+import { content } from './content-bundle.js';
 
-// ── Content registry ──────────────────────────────────────────────────────────
-// Each entry matches a text_blob binding in wrangler.ingest.toml.
-// binding:  env key for the raw file content
-// type:     'essay' | 'signal'
-// slug:     URL slug
-// title:    display title (also in front matter but parsed below)
-
-import essayManifest from './essay-manifest.json' assert { type: 'json' };
-import signalManifest from './signal-manifest.json' assert { type: 'json' };
+const EMBED_MODEL   = '@cf/baai/bge-small-en-v1.5';
+const CHUNK_SIZE    = 1500;
+const CHUNK_OVERLAP = 200;
+const EMBED_BATCH   = 10;
+const UPSERT_BATCH  = 100;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function extractTitle(raw) {
+  const m = raw.match(/^---[\s\S]*?^title:\s*["']?(.+?)["']?\s*$/m);
+  return m ? m[1].trim() : '';
+}
 
 function stripFrontMatter(raw) {
   const m = raw.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
   return m ? m[1] : raw;
-}
-
-function extractTitle(raw) {
-  const m = raw.match(/^---\n[\s\S]*?^title:\s*["']?(.+?)["']?\s*$/m);
-  return m ? m[1].trim() : '';
 }
 
 function chunkText(text) {
@@ -73,21 +60,16 @@ function chunkText(text) {
 
 export default {
   async fetch(request, env) {
-    const url     = new URL(request.url);
-    const dry     = url.searchParams.has('dry');
-
-    if (url.pathname === '/clear') {
-      // List and delete all vectors (useful before re-indexing)
-      return new Response('Use the CF dashboard to delete the index and recreate it for a full re-index.\n', { status: 200 });
-    }
+    const url = new URL(request.url);
+    const dry = url.searchParams.has('dry');
 
     if (url.pathname !== '/ingest') {
-      return new Response('GET /ingest or GET /ingest?dry=1\n', { status: 200 });
+      return new Response('GET /ingest or GET /ingest?dry=1\n');
     }
 
     const log     = [];
     let   total   = 0;
-    let   pending = [];   // { id, values, metadata }
+    let   pending = [];
 
     async function flush() {
       if (pending.length === 0 || dry) { pending = []; return; }
@@ -95,53 +77,29 @@ export default {
       pending = [];
     }
 
-    // Process one file
-    async function processFile(raw, type, slug, urlPath) {
+    for (const { type, slug, url: itemUrl, raw } of content) {
       const title  = extractTitle(raw) || slug;
       const body   = stripFrontMatter(raw);
       const chunks = chunkText(body);
 
       log.push(`${type}/${slug}: ${chunks.length} chunks`);
-
-      if (dry) { total += chunks.length; return; }
+      if (dry) { total += chunks.length; continue; }
 
       for (let i = 0; i < chunks.length; i += EMBED_BATCH) {
         const batch  = chunks.slice(i, i + EMBED_BATCH);
         const result = await env.AI.run(EMBED_MODEL, { text: batch });
-        const vecs   = result.data;
 
         for (let j = 0; j < batch.length; j++) {
           pending.push({
             id:       `${type}__${slug}__${i + j}`,
-            values:   vecs[j],
-            metadata: {
-              type,
-              slug,
-              title,
-              url:   urlPath,
-              chunk: i + j,
-              text:  batch[j].slice(0, 500),
-            },
+            values:   result.data[j],
+            metadata: { type, slug, title, url: itemUrl, chunk: i + j, text: batch[j].slice(0, 500) },
           });
           total++;
         }
 
         if (pending.length >= UPSERT_BATCH) await flush();
       }
-    }
-
-    // Essays
-    for (const { slug, binding } of essayManifest) {
-      const raw = env[binding];
-      if (!raw) { log.push(`MISSING binding: ${binding}`); continue; }
-      await processFile(raw, 'essay', slug, `https://wayward.house/essays/${slug}`);
-    }
-
-    // Signals
-    for (const { slug, binding } of signalManifest) {
-      const raw = env[binding];
-      if (!raw) { log.push(`MISSING binding: ${binding}`); continue; }
-      await processFile(raw, 'signal', slug, `https://wayward.house/signals/${slug}`);
     }
 
     await flush();

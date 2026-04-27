@@ -24,3 +24,5 @@ Thumbs.db
 # logs
 *.log
 npm-debug.log*
+scripts/content-bundle.js
+scripts/content-bundle.js
