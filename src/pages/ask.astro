@@ -262,5 +262,12 @@ import Layout from '@layouts/Layout.astro';
       ask(btn.textContent);
     });
   });
+
+  // Pre-fill from ?q= URL parameter (linked from FAB panels on book pages)
+  const qParam = new URLSearchParams(window.location.search).get('q');
+  if (qParam) {
+    input.value = qParam;
+    ask(qParam);
+  }
 })();
 </script>
