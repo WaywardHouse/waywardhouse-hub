@@ -43,6 +43,18 @@ export async function onRequest(context) {
     // Hub-owned listing pages (/essays/, /signals/) — let the static file serve.
     if (isRoot && hubOwnsRoot) return context.next();
 
+    // Sub-paths with a trailing slash get a 301 redirect to the canonical
+    // no-trailing-slash URL.  Quarto WEBSITE projects use bare relative paths
+    // like src="site_libs/quarto-nav.js" (no leading slash, no ../), which
+    // resolve correctly only when the browser URL is NOT a "directory" (i.e.
+    // has no trailing slash).  Without this redirect, browsers at
+    // /essays/alberta-calling/ resolve site_libs/ inside that directory instead
+    // of at /essays/site_libs/ — causing X-Content-Type-Options MIME errors.
+    if (isSubpath && path.endsWith('/')) {
+      const canonical = url.origin + path.slice(0, -1) + (url.search || '');
+      return Response.redirect(canonical, 301);
+    }
+
     // Compute the sub-path to forward to the backend.
     let subpath;
     if (isRoot) {
