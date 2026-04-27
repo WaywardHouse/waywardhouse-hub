@@ -1,0 +1,218 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+<Layout title="Ask" description="Ask a question about the Wayward House archive — essays on Alberta, energy, geography, and systems.">
+  <section class="wh-wrap wh-section">
+    <header class="wh-page-header">
+      <span class="wh-kicker">Ask the archive</span>
+      <h1>What do you want to understand?</h1>
+      <p class="wh-dek">Ask a question about Alberta economics, energy transition, trade geography, or anything covered in the essays and signals. Answers are grounded in the archive — not the open internet.</p>
+    </header>
+
+    <div class="wh-ask">
+      <form class="wh-ask__form" id="ask-form" novalidate>
+        <div class="wh-ask__input-row">
+          <input
+            type="text"
+            id="ask-input"
+            class="wh-ask__input"
+            placeholder="e.g. Why does Alberta have pipeline constraints?"
+            autocomplete="off"
+            maxlength="500"
+          />
+          <button type="submit" class="wh-btn wh-btn--red" id="ask-submit">Ask →</button>
+        </div>
+      </form>
+
+      <div class="wh-ask__response" id="ask-response" hidden>
+        <div class="wh-ask__answer" id="ask-answer"></div>
+        <div class="wh-ask__sources" id="ask-sources" hidden>
+          <span class="wh-kicker">From the archive</span>
+          <ul id="ask-sources-list"></ul>
+        </div>
+      </div>
+
+      <div class="wh-ask__examples">
+        <span class="wh-kicker">Try asking</span>
+        <ul class="wh-ask__example-list">
+          <li><button class="wh-ask__example" type="button">Why did the Fort McMurray fire spread so fast?</button></li>
+          <li><button class="wh-ask__example" type="button">What is Alberta's exposure to US tariffs?</button></li>
+          <li><button class="wh-ask__example" type="button">How does landlocked geography affect Alberta's oil prices?</button></li>
+          <li><button class="wh-ask__example" type="button">What is the wildland-urban interface problem?</button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.wh-ask { max-width: 680px; }
+
+.wh-ask__form { margin-bottom: 2rem; }
+
+.wh-ask__input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.wh-ask__input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-family: var(--wh-ff-body);
+  font-size: 1rem;
+  border: 1px solid var(--wh-rule);
+  background: var(--wh-paper);
+  color: var(--wh-dark);
+  outline: none;
+}
+.wh-ask__input:focus { border-color: var(--wh-red); }
+
+.wh-ask__response {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  border-left: 3px solid var(--wh-red);
+  background: var(--wh-paper);
+}
+
+.wh-ask__answer {
+  font-family: var(--wh-ff-read);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--wh-dark);
+  white-space: pre-wrap;
+}
+
+.wh-ask__answer.is-loading::after {
+  content: '▋';
+  animation: blink 0.8s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.wh-ask__sources {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--wh-rule);
+}
+.wh-ask__sources ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.wh-ask__sources li { margin-bottom: 0.35rem; }
+.wh-ask__sources a { color: var(--wh-dark); font-size: 0.875rem; }
+.wh-ask__sources a:hover { color: var(--wh-red); }
+
+.wh-ask__examples { margin-top: 1rem; }
+.wh-ask__example-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.wh-ask__example {
+  padding: 0.4rem 0.875rem;
+  border: 1px solid var(--wh-rule);
+  background: none;
+  font-family: var(--wh-ff-body);
+  font-size: 0.8125rem;
+  color: var(--wh-mid);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.wh-ask__example:hover { border-color: var(--wh-red); color: var(--wh-dark); }
+</style>
+
+<script>
+(function () {
+  const form    = document.getElementById('ask-form');
+  const input   = document.getElementById('ask-input');
+  const submit  = document.getElementById('ask-submit');
+  const resp    = document.getElementById('ask-response');
+  const answer  = document.getElementById('ask-answer');
+  const sources = document.getElementById('ask-sources');
+  const srcList = document.getElementById('ask-sources-list');
+
+  async function ask(question) {
+    if (!question.trim()) return;
+
+    // Reset UI
+    resp.hidden   = false;
+    sources.hidden = true;
+    srcList.innerHTML = '';
+    answer.textContent = '';
+    answer.classList.add('is-loading');
+    submit.disabled = true;
+    submit.textContent = 'Thinking…';
+
+    // Hide examples once used
+    document.querySelector('.wh-ask__examples')?.remove();
+
+    try {
+      const res = await fetch('/api/ask', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ question }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        answer.classList.remove('is-loading');
+        answer.textContent = data.error || 'Something went wrong. Please try again.';
+        return;
+      }
+
+      // Stream SSE
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let   buffer  = '';
+      let   text    = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // keep incomplete line
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6);
+          if (data === '[DONE]') continue;
+
+          try {
+            const parsed = JSON.parse(data);
+
+            // Sources packet (our custom final event)
+            if (parsed.sources) {
+              const srcs = parsed.sources;
+              if (srcs.length > 0) {
+                srcList.innerHTML = srcs
+                  .map(s => `<li><a href="${s.url}">${s.title}</a></li>`)
+                  .join('');
+                sources.hidden = false;
+              }
+              continue;
+            }
+
+            // Token packet
+            const token = parsed.response ?? parsed.choices?.[0]?.delta?.content ?? '';
+            text += token;
+            answer.textContent = text;
+          } catch { /* skip non-JSON lines */ }
+        }
+      }
+    } catch (err) {
+      answer.textContent = 'Network error. Please try again.';
+    } finally {
+      answer.classList.remove('is-loading');
+      submit.disabled    = false;
+      submit.textContent = 'Ask →';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    ask(input.value);
+  });
+
+  // Example buttons
+  document.querySelectorAll('.wh-ask__example').forEach(btn => {
+    btn.addEventListener('click', () => {
+      input.value = btn.textContent;
+      ask(btn.textContent);
+    });
+  });
+})();
+</script>
