@@ -20,24 +20,17 @@ const FLAT_SOURCES = [
   { dir: join(root, '../wh-signals/signals'), type: 'signal', urlPrefix: 'https://wayward.house/signals/' },
 ];
 
-// ── Nested sources: essays/<dir>/essay.qmd ────────────────────────────────────
-const NESTED_SOURCES = [
-  {
-    dir:     join(root, '../computational-geography-lab/essays'),
-    type:    'model',
-    // URL: permalink from front matter, else /computational-geography/<dir>/
-    urlBase: 'https://wayward.house/computational-geography',
-  },
-];
-
-function extractPermalink(raw) {
-  const m = raw.match(/^permalink:\s*["']?(.+?)["']?\s*$/m);
-  return m ? m[1].trim() : null;
-}
+// ── wh-com-geog: flat .qmd per section subdirectory ───────────────────────────
+// Chapters live at wh-com-geog/<section>/<slug>.qmd
+// Deployed at /computational-geography/<section>/<slug>.html
+const COM_GEOG_DIR  = join(root, '../wh-com-geog');
+const COM_GEOG_BASE = 'https://wayward.house/computational-geography';
+// Sections that contain substantive chapters (skip utility/nav dirs)
+const COM_GEOG_SKIP = new Set(['_freeze', '_book', '_book-core', '_book-lab', '_book-topics', '_extensions', 'assets', 'node_modules', '.git']);
 
 const items = [];
 
-// Flat sources
+// Flat sources (essays + signals)
 for (const { dir, type, urlPrefix } of FLAT_SOURCES) {
   const files = readdirSync(dir).filter(f => f.endsWith('.qmd') && f !== 'index.qmd');
   for (const file of files) {
@@ -48,21 +41,29 @@ for (const { dir, type, urlPrefix } of FLAT_SOURCES) {
   }
 }
 
-// Nested sources (dir/essay.qmd)
-for (const { dir, type, urlBase } of NESTED_SOURCES) {
-  const subdirs = readdirSync(dir).filter(d => statSync(join(dir, d)).isDirectory());
-  for (const subdir of subdirs.sort()) {
-    const qmd = join(dir, subdir, 'essay.qmd');
+// wh-com-geog chapters
+const sections = readdirSync(COM_GEOG_DIR).filter(d => {
+  if (COM_GEOG_SKIP.has(d) || d.startsWith('.') || d.startsWith('_')) return false;
+  try { return statSync(join(COM_GEOG_DIR, d)).isDirectory(); } catch { return false; }
+});
+
+for (const section of sections.sort()) {
+  const sectionDir = join(COM_GEOG_DIR, section);
+  let files;
+  try {
+    files = readdirSync(sectionDir).filter(f => f.endsWith('.qmd') && f !== 'index.qmd');
+  } catch { continue; }
+
+  for (const file of files) {
+    const slug = file.replace('.qmd', '');
+    const id   = `${section}/${slug}`;
+    const url  = `${COM_GEOG_BASE}/${section}/${slug}.html`;
     try {
-      const raw       = readFileSync(qmd, 'utf8');
-      const permalink = extractPermalink(raw);
-      const url       = permalink
-        ? `${urlBase}${permalink}`                         // e.g. /alberta-renewable-resource-geography/
-        : `${urlBase}/${subdir}/`;                        // fallback for unpublished
-      items.push({ type, slug: subdir, url, raw });
-      process.stdout.write(`  ${type}/${subdir}\n`);
+      const raw = readFileSync(join(sectionDir, file), 'utf8');
+      items.push({ type: 'chapter', slug: id, url, raw });
+      process.stdout.write(`  chapter/${id}\n`);
     } catch {
-      process.stdout.write(`  SKIP ${subdir} (no essay.qmd)\n`);
+      process.stdout.write(`  SKIP ${id}\n`);
     }
   }
 }

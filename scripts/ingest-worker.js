@@ -20,6 +20,15 @@ const UPSERT_BATCH  = 100;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+/** Short deterministic ID ≤ 64 bytes: first 8 chars of type + slug hash + chunk index */
+async function makeId(type, slug, chunkIdx) {
+  const key    = `${type}:${slug}`;
+  const buf    = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(key));
+  const hex    = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 20);
+  const prefix = type.slice(0, 3);  // e.g. "cha", "ess", "sig"
+  return `${prefix}_${hex}_${chunkIdx}`;  // max: 3 + 1 + 20 + 1 + 5 = 30 chars
+}
+
 function extractTitle(raw) {
   const m = raw.match(/^---[\s\S]*?^title:\s*["']?(.+?)["']?\s*$/m);
   return m ? m[1].trim() : '';
@@ -106,8 +115,9 @@ export default {
         const result = await env.AI.run(EMBED_MODEL, { text: batch });
 
         for (let j = 0; j < batch.length; j++) {
+          const id = await makeId(type, slug, i + j);
           pending.push({
-            id:       `${type}__${slug}__${i + j}`,
+            id,
             values:   result.data[j],
             metadata: { type, slug, title, url: itemUrl, chunk: i + j, text: batch[j].slice(0, 500) },
           });
