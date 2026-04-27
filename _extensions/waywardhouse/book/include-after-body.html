@@ -1,0 +1,139 @@
+<!-- Wayward House — book theme: footer + behaviour JS -->
+
+<footer class="wh-bk-ftr" role="contentinfo">
+  <div class="wh-bk-ftr__inner">
+
+    <div class="wh-bk-ftr__brand">
+      <div class="wh-bk-ftr__logo">Wayward<span>·</span>House</div>
+      <p>Understanding how place, economy, and environment interact through analysis, modelling, and open tools.</p>
+    </div>
+
+    <nav class="wh-bk-ftr__col" aria-labelledby="ftr-read">
+      <h2 id="ftr-read">Read</h2>
+      <a href="https://wayward.house/essays/">Essays</a>
+      <a href="https://wayward.house/signals/">System Signals</a>
+      <a href="https://wayward.house/topics/">Topics</a>
+    </nav>
+
+    <nav class="wh-bk-ftr__col" aria-labelledby="ftr-learn">
+      <h2 id="ftr-learn">Learn</h2>
+      <a href="https://wayward.house/library/">Library</a>
+      <a href="https://wayward.house/computational-geography/">Computational Geography</a>
+      <a href="https://wayward.house/mathematics/">Mathematics</a>
+    </nav>
+
+    <nav class="wh-bk-ftr__col" aria-labelledby="ftr-site">
+      <h2 id="ftr-site">Site</h2>
+      <a href="https://wayward.house/about/">About</a>
+      <a href="https://wayward.house/start-here/">Start Here</a>
+      <a href="https://wayward.house/privacy/">Privacy</a>
+      <a href="https://wayward.house/terms/">Terms</a>
+    </nav>
+
+  </div>
+  <div class="wh-bk-ftr__base">
+    <span>© 2026 Wayward House · Paul Hobson</span>
+    <span>CC BY 4.0 · MIT code</span>
+  </div>
+</footer>
+
+<!-- Back-to-top button -->
+<button class="wh-bk-top" type="button" aria-label="Back to top" hidden>
+  <span aria-hidden="true">↑</span>
+</button>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. Sidebar: hide Quarto's built-in navbar chrome ───────────────── */
+  var hdr = document.querySelector('#quarto-header, header.navbar');
+  if (hdr) hdr.style.display = 'none';
+
+  /* ── 2. Desktop sidebar: persist open/closed state ─────────────────── */
+  var STORAGE_KEY = 'wh-book-sidebar';
+  var media       = window.matchMedia('(min-width: 992px)');
+  var body        = document.body;
+
+  function setSidebar(open) {
+    body.classList.toggle('wh-sidebar-open',     open);
+    body.classList.toggle('wh-sidebar-collapsed', !open);
+    try { localStorage.setItem(STORAGE_KEY, open ? '1' : '0'); } catch (_) {}
+  }
+
+  function initSidebar() {
+    if (!media.matches) {
+      body.classList.remove('wh-sidebar-open', 'wh-sidebar-collapsed');
+      return;
+    }
+    var stored;
+    try { stored = localStorage.getItem(STORAGE_KEY); } catch (_) {}
+    setSidebar(stored === '0' ? false : true); // default open
+  }
+
+  /* Wire the WH menu button AND Quarto's own toggle buttons */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest(
+      '.wh-bk-menu-btn, [data-bs-target=".quarto-sidebar-collapse-item"]'
+    );
+    if (!btn || !media.matches) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setSidebar(body.classList.contains('wh-sidebar-collapsed'));
+  });
+
+  /* Close sidebar when glass overlay is tapped on mobile */
+  var glass = document.getElementById('quarto-sidebar-glass');
+  if (glass) {
+    glass.addEventListener('click', function (e) {
+      if (media.matches) return;
+      e.preventDefault();
+    });
+  }
+
+  (media.addEventListener
+    ? function (fn) { media.addEventListener('change', fn); }
+    : function (fn) { media.addListener(fn); }
+  )(initSidebar);
+
+  initSidebar();
+
+  /* ── 3. Sidebar title link → site home ─────────────────────────────── */
+  var sidebar = document.getElementById('quarto-sidebar');
+  if (sidebar) {
+    var titleA = sidebar.querySelector('.sidebar-title a');
+    if (titleA) titleA.href = 'https://wayward.house/';
+  }
+
+  /* ── 4. Back-to-top button ──────────────────────────────────────────── */
+  var topBtn   = document.querySelector('.wh-bk-top');
+  var ticking  = false;
+  var reduced  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function updateTop() {
+    if (!topBtn) return;
+    var scrolled  = window.scrollY || document.documentElement.scrollTop || 0;
+    var longPage  = document.documentElement.scrollHeight > window.innerHeight * 1.5;
+    var threshold = Math.max(380, window.innerHeight * 0.6);
+    topBtn.hidden = !(longPage && scrolled > threshold);
+    ticking = false;
+  }
+
+  if (topBtn) {
+    topBtn.hidden = true;
+    topBtn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    });
+    window.addEventListener('scroll',  function () {
+      if (!ticking) { requestAnimationFrame(updateTop); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', updateTop, { passive: true });
+    updateTop();
+  }
+
+  /* ── 5. Suppress Quarto's native page-footer ────────────────────────── */
+  var qtFtr = document.querySelector('footer.page-footer');
+  if (qtFtr) qtFtr.style.display = 'none';
+
+})();
+</script>

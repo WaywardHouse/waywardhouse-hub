@@ -1,0 +1,29 @@
+<!-- Wayward House — book theme: site header (rendered before Quarto body) -->
+<header class="wh-bk-hdr" role="banner">
+  <div class="wh-bk-hdr__inner">
+
+    <a class="wh-bk-brand" href="https://wayward.house/" aria-label="Wayward House home">
+      <span class="wh-bk-brand__word">Wayward</span><span class="wh-bk-brand__dot" aria-hidden="true">·</span><span class="wh-bk-brand__word">House</span>
+    </a>
+
+    <nav class="wh-bk-nav" aria-label="Site navigation">
+      <a href="https://wayward.house/essays/">Essays</a>
+      <a href="https://wayward.house/signals/">Signals</a>
+      <a href="https://wayward.house/library/">Library</a>
+    </nav>
+
+    <!-- Mobile sidebar toggle — mirrors Quarto's own button so it works with Bootstrap collapse -->
+    <button class="wh-bk-menu-btn"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target=".quarto-sidebar-collapse-item"
+            aria-controls="quarto-sidebar"
+            aria-expanded="false"
+            aria-label="Toggle chapter navigation">
+      <span class="wh-bk-menu-btn__bar" aria-hidden="true"></span>
+      <span class="wh-bk-menu-btn__bar" aria-hidden="true"></span>
+      <span class="wh-bk-menu-btn__bar" aria-hidden="true"></span>
+    </button>
+
+  </div>
+</header>

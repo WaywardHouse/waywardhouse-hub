@@ -1,0 +1,25 @@
+title: Wayward House Book Theme
+author: Paul Hobson
+version: 1.0.0
+quarto-required: ">=1.5.0"
+
+contributes:
+  formats:
+    # Used in books as:  format: waywardhouse-book-html: default
+    waywardhouse-book-html:
+      theme: [cosmo, theme.scss]
+      include-in-header:    include-in-header.html
+      include-before-body:  include-before-body.html
+      include-after-body:   include-after-body.html
+      toc: true
+      toc-depth: 3
+      number-sections: false
+      smooth-scroll: true
+      html-math-method: katex
+      fig-align: center
+      callout-appearance: simple
+      code-fold: false
+      grid:
+        sidebar-width: 300px
+        body-width:    720px
+        margin-width:  250px
