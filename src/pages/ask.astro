@@ -1,12 +1,19 @@
 ---
 import Layout from '@layouts/Layout.astro';
 ---
-<Layout title="Ask" description="Ask a question about the Wayward House archive — essays on Alberta, energy, geography, and systems.">
+<Layout title="Ask Pepper" description="Ask Pepper — a blind Labrador who navigates the Wayward House archive entirely by smell. Geography questions answered from the essays and signals.">
   <section class="wh-wrap wh-section">
-    <header class="wh-page-header">
-      <span class="wh-kicker">Ask the archive</span>
-      <h1>What do you want to understand?</h1>
-      <p class="wh-dek">Ask a question about Alberta economics, energy transition, trade geography, or anything covered in the essays and signals. Answers are grounded in the archive — not the open internet.</p>
+    <header class="wh-page-header wh-pepper-header">
+      <div class="wh-pepper-id">
+        <div class="wh-pepper-badge">
+          <span class="wh-pepper-nose" aria-hidden="true">🐾</span>
+        </div>
+        <div>
+          <span class="wh-kicker">Archive assistant</span>
+          <h1>Ask Pepper</h1>
+        </div>
+      </div>
+      <p class="wh-dek">Pepper is a blind Labrador who navigates the Wayward House archive entirely by smell. She knows Alberta economics, energy geography, trade, and the environment — anything covered in the essays and signals. Outside the archive, her nose goes quiet and she'll tell you so.</p>
     </header>
 
     <div class="wh-ask">
@@ -16,7 +23,7 @@ import Layout from '@layouts/Layout.astro';
             type="text"
             id="ask-input"
             class="wh-ask__input"
-            placeholder="e.g. Why does Alberta have pipeline constraints?"
+            placeholder="Ask Pepper a geography question…"
             autocomplete="off"
             maxlength="500"
           />
@@ -25,6 +32,10 @@ import Layout from '@layouts/Layout.astro';
       </form>
 
       <div class="wh-ask__response" id="ask-response" hidden>
+        <div class="wh-ask__byline">
+          <span class="wh-pepper-inline" aria-hidden="true">🐾</span>
+          <span class="wh-kicker">Pepper</span>
+        </div>
         <div class="wh-ask__answer" id="ask-answer"></div>
         <div class="wh-ask__sources" id="ask-sources" hidden>
           <span class="wh-kicker">From the archive</span>
@@ -32,13 +43,15 @@ import Layout from '@layouts/Layout.astro';
         </div>
       </div>
 
-      <div class="wh-ask__examples">
-        <span class="wh-kicker">Try asking</span>
+      <div class="wh-ask__examples" id="ask-examples">
+        <span class="wh-kicker">Things Pepper knows well</span>
         <ul class="wh-ask__example-list">
-          <li><button class="wh-ask__example" type="button">Why did the Fort McMurray fire spread so fast?</button></li>
-          <li><button class="wh-ask__example" type="button">What is Alberta's exposure to US tariffs?</button></li>
-          <li><button class="wh-ask__example" type="button">How does landlocked geography affect Alberta's oil prices?</button></li>
-          <li><button class="wh-ask__example" type="button">What is the wildland-urban interface problem?</button></li>
+          <li><button class="wh-ask__example" type="button">Why did the Fort McMurray fire spread so fast into the city?</button></li>
+          <li><button class="wh-ask__example" type="button">What is the wildland-urban interface and why does it matter for Alberta?</button></li>
+          <li><button class="wh-ask__example" type="button">How does Alberta's landlocked geography affect oil prices?</button></li>
+          <li><button class="wh-ask__example" type="button">What is the rockets and feathers problem at the pump?</button></li>
+          <li><button class="wh-ask__example" type="button">How exposed is Alberta to US tariffs?</button></li>
+          <li><button class="wh-ask__example" type="button">What makes the Strait of Georgia a chokepoint for BC exports?</button></li>
         </ul>
       </div>
     </div>
@@ -46,7 +59,30 @@ import Layout from '@layouts/Layout.astro';
 </Layout>
 
 <style>
-.wh-ask { max-width: 680px; }
+.wh-pepper-header { padding-bottom: 0; }
+
+.wh-pepper-id {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.wh-pepper-badge {
+  width: 56px;
+  height: 56px;
+  background: var(--wh-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.wh-pepper-id h1 { margin: 0; }
+.wh-pepper-id .wh-kicker { display: block; margin-bottom: 0.25rem; }
+
+.wh-ask { max-width: 680px; margin-top: 2rem; }
 
 .wh-ask__form { margin-bottom: 2rem; }
 
@@ -69,10 +105,18 @@ import Layout from '@layouts/Layout.astro';
 
 .wh-ask__response {
   margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  border-left: 3px solid var(--wh-red);
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--wh-dark);
   background: var(--wh-paper);
 }
+
+.wh-ask__byline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+}
+.wh-pepper-inline { font-size: 0.875rem; }
 
 .wh-ask__answer {
   font-family: var(--wh-ff-read);
@@ -89,7 +133,7 @@ import Layout from '@layouts/Layout.astro';
 @keyframes blink { 50% { opacity: 0; } }
 
 .wh-ask__sources {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid var(--wh-rule);
 }
@@ -98,8 +142,15 @@ import Layout from '@layouts/Layout.astro';
 .wh-ask__sources a { color: var(--wh-dark); font-size: 0.875rem; }
 .wh-ask__sources a:hover { color: var(--wh-red); }
 
-.wh-ask__examples { margin-top: 1rem; }
-.wh-ask__example-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.wh-ask__examples { margin-top: 0.5rem; }
+.wh-ask__example-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 .wh-ask__example {
   padding: 0.4rem 0.875rem;
   border: 1px solid var(--wh-rule);
@@ -108,35 +159,34 @@ import Layout from '@layouts/Layout.astro';
   font-size: 0.8125rem;
   color: var(--wh-mid);
   cursor: pointer;
+  text-align: left;
   transition: border-color 0.15s, color 0.15s;
 }
-.wh-ask__example:hover { border-color: var(--wh-red); color: var(--wh-dark); }
+.wh-ask__example:hover { border-color: var(--wh-dark); color: var(--wh-dark); }
 </style>
 
 <script>
 (function () {
-  const form    = document.getElementById('ask-form');
-  const input   = document.getElementById('ask-input');
-  const submit  = document.getElementById('ask-submit');
-  const resp    = document.getElementById('ask-response');
-  const answer  = document.getElementById('ask-answer');
-  const sources = document.getElementById('ask-sources');
-  const srcList = document.getElementById('ask-sources-list');
+  const form     = document.getElementById('ask-form');
+  const input    = document.getElementById('ask-input');
+  const submit   = document.getElementById('ask-submit');
+  const resp     = document.getElementById('ask-response');
+  const answer   = document.getElementById('ask-answer');
+  const sources  = document.getElementById('ask-sources');
+  const srcList  = document.getElementById('ask-sources-list');
+  const examples = document.getElementById('ask-examples');
 
   async function ask(question) {
     if (!question.trim()) return;
 
-    // Reset UI
-    resp.hidden   = false;
+    resp.hidden    = false;
     sources.hidden = true;
-    srcList.innerHTML = '';
+    srcList.innerHTML  = '';
     answer.textContent = '';
     answer.classList.add('is-loading');
-    submit.disabled = true;
-    submit.textContent = 'Thinking…';
-
-    // Hide examples once used
-    document.querySelector('.wh-ask__examples')?.remove();
+    submit.disabled    = true;
+    submit.textContent = 'Sniffing…';
+    if (examples) examples.hidden = true;
 
     try {
       const res = await fetch('/api/ask', {
@@ -152,7 +202,6 @@ import Layout from '@layouts/Layout.astro';
         return;
       }
 
-      // Stream SSE
       const reader  = res.body.getReader();
       const decoder = new TextDecoder();
       let   buffer  = '';
@@ -164,7 +213,7 @@ import Layout from '@layouts/Layout.astro';
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
-        buffer = lines.pop(); // keep incomplete line
+        buffer = lines.pop();
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
@@ -174,11 +223,9 @@ import Layout from '@layouts/Layout.astro';
           try {
             const parsed = JSON.parse(data);
 
-            // Sources packet (our custom final event)
             if (parsed.sources) {
-              const srcs = parsed.sources;
-              if (srcs.length > 0) {
-                srcList.innerHTML = srcs
+              if (parsed.sources.length > 0) {
+                srcList.innerHTML = parsed.sources
                   .map(s => `<li><a href="${s.url}">${s.title}</a></li>`)
                   .join('');
                 sources.hidden = false;
@@ -186,15 +233,14 @@ import Layout from '@layouts/Layout.astro';
               continue;
             }
 
-            // Token packet
             const token = parsed.response ?? parsed.choices?.[0]?.delta?.content ?? '';
             text += token;
             answer.textContent = text;
-          } catch { /* skip non-JSON lines */ }
+          } catch { /* skip */ }
         }
       }
-    } catch (err) {
-      answer.textContent = 'Network error. Please try again.';
+    } catch {
+      answer.textContent = "Pepper's nose twitched but nothing came through. Try again.";
     } finally {
       answer.classList.remove('is-loading');
       submit.disabled    = false;
@@ -207,7 +253,6 @@ import Layout from '@layouts/Layout.astro';
     ask(input.value);
   });
 
-  // Example buttons
   document.querySelectorAll('.wh-ask__example').forEach(btn => {
     btn.addEventListener('click', () => {
       input.value = btn.textContent;
