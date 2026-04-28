@@ -716,27 +716,31 @@ body.split-home {
 
 /* ── 10. SCROLLYTELLING  (.story-section / .story-sticky / .story-steps)
    ══════════════════════════════════════════════════════════════════════════
-   Classic Scrollama "overlay" pattern:
-     - .story-sticky pins the map to the viewport while .story-steps scrolls
-     - .story-steps is pulled up via negative margin to overlap the sticky panel
-     - Individual .story-step cards float over the map with a readable background
-     - Scroll triggers fire at mid-viewport; IntersectionObserver in core.js
-       dispatches story:step → updateMap()/updateLeaflet() on each step enter
+   Side-by-side "column" pattern:
+     - .story-section is a two-column grid: map pinned left, steps scroll right
+     - .story-sticky holds the map in the left column via position:sticky
+     - .story-steps sits in the right column — no map overlay, no transparency
+     - Scroll triggers fire at 55% viewport; scrollama dispatches story:step
+       → updateMap()/updateLeaflet() on each step enter
    ════════════════════════════════════════════════════════════════════════════ */
 
-/* Outer section — height is determined by .story-steps content */
+/* Outer section — two-column grid: [map] [steps] */
 .story-section {
-  position: relative;
-  margin-block: 3rem;
+  position:              relative;
+  display:               grid;
+  grid-template-columns: 1fr 40ch;
+  column-gap:            2.5rem;
+  align-items:           start;
+  margin-block:          3rem;
 }
 
-/* Sticky panel — map/viz pins here while steps scroll past */
+/* Sticky panel — map/viz in left column, pins while steps scroll */
 .story-sticky {
   position:   sticky;
   top:        var(--wh-nav-h);
   height:     calc(100vh - var(--wh-nav-h));
   overflow:   hidden;
-  background: var(--wh-rule);   /* placeholder colour while map loads */
+  background: var(--wh-rule);
   z-index:    0;
 }
 
@@ -757,51 +761,52 @@ body.split-home {
   height: 100%;
 }
 
-/* Steps column — overlaps the sticky panel by pulling up via negative margin */
+/* Steps column — right column, natural document flow */
 .story-steps {
   position:       relative;
-  z-index:        10;
-  margin-top:     calc(-100vh + var(--wh-nav-h));
-  padding-bottom: 30vh;          /* lets the last step scroll fully into view */
+  z-index:        1;
+  padding-bottom: 30vh;
+  pointer-events: none;
 }
 
-/* Individual step card */
+/* Individual step card — solid background, no overlay needed */
 .story-step {
-  max-width:    38ch;
-  margin-left:  auto;
-  margin-right: 2rem;
-  margin-bottom: 60vh;           /* gap between steps = scroll travel distance */
-  padding:      1.25rem 1.5rem;
-  background:   rgba(248, 248, 244, 0.92);
-  backdrop-filter: blur(4px);
-  border-left:  3px solid var(--wh-red);
-  font-size:    0.95rem;
-  line-height:  1.65;
-  pointer-events: all;
+  margin-bottom:    60vh;
+  padding:          1.25rem 1.5rem;
+  background:       var(--wh-paper);
+  border-left:      3px solid var(--wh-red);
+  font-size:        0.95rem;
+  line-height:      1.65;
+  pointer-events:   all;
 }
 
-/* First step — top margin gives a clear view of the map before first trigger */
+/* First step — initial gap so map is visible before scrolling begins */
 .story-step:first-child { margin-top: 30vh; }
 
-/* Last step — no extra bottom gap (padding-bottom on steps handles exit) */
+/* Last step — padding-bottom on .story-steps handles the exit scroll */
 .story-step:last-child  { margin-bottom: 0; }
 
 /* Remove bottom margin on final paragraph inside a step */
 .story-step p:last-child { margin-bottom: 0; }
 
-/* Active step — slightly more opaque for readability */
+/* Active step — subtle lift to confirm the trigger */
 .story-step[data-active] {
-  background: rgba(248, 248, 244, 0.97);
+  background:  var(--wh-paper);
+  box-shadow:  0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Pointer-events: none on the steps column so map remains interactive
-   between steps; the step card re-enables events via pointer-events: all */
+   between step cards; individual cards restore via pointer-events: all */
 .story-steps {
   pointer-events: none;
 }
 
 /* ── Mobile: un-stick the map, stack vertically ─────────────────────────── */
 @media (max-width: 767px) {
+  .story-section {
+    display: block;
+  }
+
   .story-sticky {
     position:   relative;
     top:        auto;
@@ -810,15 +815,11 @@ body.split-home {
   }
 
   .story-steps {
-    margin-top:     0;
     padding-bottom: 0;
     pointer-events: all;
   }
 
   .story-step {
-    max-width:    100%;
-    margin-left:  0;
-    margin-right: 0;
     margin-bottom: 1.5rem;
   }
 
