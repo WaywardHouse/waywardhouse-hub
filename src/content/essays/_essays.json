@@ -1,5 +1,19 @@
 [
   {
+    "id": "the-distance-to-care",
+    "title": "The Distance to Care",
+    "dek": "Alberta has among the worst physician-to-population ratios in Canada. For most residents that is a statistic. For a growing number it is a geography — measured in hours and kilometres.",
+    "pubDate": "2026-04-28",
+    "topic": "Geography",
+    "topics": ["health-geography", "human-geography"],
+    "readTime": 16,
+    "heroImage": "geo-04",
+    "heroTreatment": "caption-bar",
+    "featured": false,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "fire-country",
     "title": "Fire Country",
     "dek": "Fort McMurray showed what happens when fire reaches the wildland-urban edge. The WUI keeps expanding. The fire climate is changing. The two trends are running toward each other.",

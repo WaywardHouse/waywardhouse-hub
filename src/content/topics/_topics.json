@@ -117,5 +117,19 @@
     "slug": "trade-policy",
     "pillar": "Economy",
     "description": "Tariffs, agreements, and the political economy of how goods cross borders."
+  },
+  {
+    "id": "health-geography",
+    "title": "Health geography",
+    "slug": "health-geography",
+    "pillar": "Places",
+    "description": "Where care is available, where it is not, and what that distance costs in health outcomes."
+  },
+  {
+    "id": "human-geography",
+    "title": "Human geography",
+    "slug": "human-geography",
+    "pillar": "Geography",
+    "description": "Population, migration, access, and the spatial patterns of how people live."
   }
 ]
