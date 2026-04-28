@@ -82,6 +82,8 @@
 }
 .wh-nav a:hover { color: var(--wh-white); }
 .wh-nav a.is-active { color: var(--wh-white); border-bottom-color: var(--wh-red); }
+.wh-nav a[href="/ask/"] { color: var(--wh-amber); }
+.wh-nav a[href="/ask/"]:hover { color: #fff; }
 .wh-hdr__actions {
   margin-left: auto;
   display: flex;

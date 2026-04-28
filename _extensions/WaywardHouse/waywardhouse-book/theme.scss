@@ -177,6 +177,12 @@ body {
   color:           #fff;
   text-decoration: none;
 }
+.wh-bk-nav__pepper {
+  color: var(--wh-amber) !important;
+}
+.wh-bk-nav__pepper:hover {
+  color: #fff !important;
+}
 
 /* Mobile hamburger */
 .wh-bk-menu-btn {

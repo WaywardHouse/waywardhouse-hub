@@ -27,7 +27,7 @@ export const navItems = [
   { label: 'System Signals', key: 'signals', href: '/signals/' },
   { label: 'Library',        key: 'library', href: '/library/' },
   { label: 'Topics',         key: 'topics',  href: '/topics/'  },
-  { label: 'Ask Pepper',     key: 'ask',     href: '/ask/'     },
+  { label: '🐾 Ask Pepper',  key: 'ask',     href: '/ask/'     },
   { label: 'About',          key: 'about',   href: '/about/'   },
 ] as const;
 
