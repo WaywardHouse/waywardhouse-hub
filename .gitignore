@@ -26,3 +26,4 @@ Thumbs.db
 npm-debug.log*
 scripts/content-bundle.js
 scripts/content-bundle.js
+.cloudflare_env
