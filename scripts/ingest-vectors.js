@@ -36,6 +36,15 @@ if (!ACCOUNT_ID || !API_TOKEN) {
   process.exit(1);
 }
 
+for (const [name, val] of [['CLOUDFLARE_API_TOKEN', API_TOKEN], ['CLOUDFLARE_ACCOUNT_ID', ACCOUNT_ID]]) {
+  for (let i = 0; i < val.length; i++) {
+    if (val.charCodeAt(i) > 127) {
+      console.error(`${name} contains a non-ASCII character at position ${i} (value ${val.charCodeAt(i)}, U+${val.charCodeAt(i).toString(16).toUpperCase().padStart(4,'0')}). Re-paste the value from the Cloudflare dashboard.`);
+      process.exit(1);
+    }
+  }
+}
+
 const AI_URL        = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/@cf/baai/bge-small-en-v1.5`;
 const VECTORIZE_URL = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/vectorize/v2/indexes/wh-content/upsert`;
 
@@ -81,6 +90,12 @@ function chunkText(text) {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[*_`]/g, '')
     .replace(/\n{3,}/g, '\n\n')
+    // Normalise typographic characters that exceed Latin-1 (bge model requires ASCII)
+    .replace(/[–—]/g, '-')   // en/em dash → hyphen
+    .replace(/[‘’]/g, "'")   // curly single quotes → straight
+    .replace(/[“”]/g, '"')   // curly double quotes → straight
+    .replace(/…/g, '...')         // ellipsis → three dots
+    .replace(/[^\x00-\xFF]/g, ' ')     // anything else outside Latin-1 → space
     .trim();
 
   const paragraphs = clean.split(/\n\n+/);
