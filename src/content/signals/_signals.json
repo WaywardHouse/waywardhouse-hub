@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-005",
+    "issue": 5,
+    "title": "System Signals No. 5",
+    "pubDate": "2026-04-29",
+    "topic": "Economy",
+    "summary": "Shell bets $22 billion on Canadian gas the same week the UAE breaks OPEC and Ottawa opens a sovereign wealth fund seeded with borrowed money.",
+    "bullets": [
+      "The UAE exits OPEC after sixty years; Brent hits $111 per barrel.",
+      "Shell acquires ARC Resources for $22 billion to anchor LNG Canada's Phase 2 expansion.",
+      "Ottawa tables $37.5 billion in new spending, including a sovereign wealth fund seeded with $25 billion in borrowed money."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-004",
     "issue": 4,
     "title": "System Signals No. 4",
