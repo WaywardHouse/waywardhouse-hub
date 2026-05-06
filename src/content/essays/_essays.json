@@ -1,5 +1,19 @@
 [
   {
+    "id": "the-measurement-state",
+    "title": "The Measurement State",
+    "dek": "Before a government can manage a territory, it has to see it. The sensors, registries, and observation systems that make Alberta legible to the state are also making it legible to everyone else.",
+    "pubDate": "2026-05-05",
+    "topic": "Geography",
+    "topics": ["monitoring", "economic-geography"],
+    "readTime": 13,
+    "heroImage": "sys-03",
+    "heroTreatment": "duotone",
+    "featured": false,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "the-distance-to-care",
     "title": "The Distance to Care",
     "dek": "Alberta has among the worst physician-to-population ratios in Canada. For most residents that is a statistic. For a growing number it is a geography — measured in hours and kilometres.",
