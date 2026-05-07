@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-006",
+    "issue": 6,
+    "title": "System Signals No. 6",
+    "pubDate": "2026-05-07",
+    "topic": "Economy",
+    "summary": "Trump launches and pauses Operation Project Freedom in 24 hours as a U.S.-Iran peace framework takes shape, sending Brent on a $14 round trip and forcing the Bank of Canada to explicitly flag consecutive rate hikes.",
+    "bullets": [
+      "Project Freedom launched and paused as a U.S.-Iran MOU emerges through Pakistan; Brent swings from $114 to $100.",
+      "Governor Macklem tells Parliament consecutive rate hikes are possible if energy inflation spreads beyond oil and gas.",
+      "Carney calls a new Alberta pipeline 'more likely than not' — no builder has stepped forward, and 302,000 Albertans have signed a petition to separate."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-005",
     "issue": 5,
     "title": "System Signals No. 5",
