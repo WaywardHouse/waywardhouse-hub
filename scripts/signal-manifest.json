@@ -14,5 +14,14 @@
   {
     "slug": "issue-004",
     "binding": "SIGNAL_ISSUE_004"
+  },
+  {
+    "slug": "issue-005",
+    "binding": "SIGNAL_ISSUE_005"
+  },
+  {
+    "slug": "issue-006",
+    "binding": "SIGNAL_ISSUE_006"
   }
+
 ]
