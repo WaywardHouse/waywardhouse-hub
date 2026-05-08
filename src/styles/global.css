@@ -1386,6 +1386,10 @@
 .wh-grid--2 { grid-template-columns: repeat(2, 1fr); }
 @media (max-width: 900px) {
   .wh-grid--3, .wh-grid--2 { grid-template-columns: 1fr; }
+  /* Reset nth-child border rules — all cards go full-width, no right borders */
+  .wh-card { border-right: none; }
+  .wh-card:nth-last-child(-n+3) { border-bottom: 1px solid var(--wh-rule); }
+  .wh-card:last-child { border-bottom: none; }
 }
 
 /* ── Essay card (home page grid) ────────────────────────────────────────── */
@@ -2343,4 +2347,39 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--wh-muted);
+}
+
+/* ── Mobile overrides (≤640px — iPhone and small phones) ───────────────── */
+@media (max-width: 640px) {
+  /* Header: hide nav links, collapse search to icon only */
+  .wh-nav { display: none; }
+  .wh-search { min-width: unset; padding: 0.48rem 0.65rem; }
+  .wh-search > span:not(.wh-search__icon) { display: none; }
+
+  /* Footer: single-column stack */
+  .wh-ftr__inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .wh-ftr__base { flex-direction: column; gap: 0.2rem; }
+
+  /* Section head: stack vertically so long titles don't overflow */
+  .wh-sh { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .wh-sh h2 { font-size: 1.25rem; }
+
+  /* Section wrapper: tighter vertical padding */
+  .wh-section { padding: 2rem 0; }
+
+  /* Dark band (System Signals) */
+  .wh-band { padding: 2rem 0; }
+
+  /* Cinematic hero: shorter on small screens */
+  .wh-hero--cinematic { min-height: 420px; }
+  .wh-hero__inner { padding: 1.75rem 0 1.5rem; }
+  .wh-hero--cinematic .wh-hero__title { max-width: 100%; }
+
+  /* Book second-tier nav: hide nav links on mobile, keep back + title */
+  .wh-hdr__book-nav { display: none; }
+  .wh-hdr__book-inner { gap: 0.75rem; }
 }
