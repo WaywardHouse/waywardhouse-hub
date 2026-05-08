@@ -74,8 +74,11 @@ export async function onRequest(context) {
       if (isBook) {
         // Quarto BOOK projects use src="../site_libs/..." (relative with ../),
         // which only resolves correctly when the browser URL is a "directory"
-        // (has a trailing slash).  Redirect bare sub-paths to the slash form.
-        if (!path.endsWith('/')) {
+        // (has a trailing slash).  Redirect bare page paths to the slash form.
+        // Only redirect paths that look like HTML pages (no file extension) —
+        // asset URLs like /site_libs/bootstrap.min.css must not get a slash.
+        const hasExtension = /\.[a-zA-Z0-9]+$/.test(path);
+        if (!path.endsWith('/') && !hasExtension) {
           return Response.redirect(url.origin + path + '/' + (url.search || ''), 301);
         }
       } else {
