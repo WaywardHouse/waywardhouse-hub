@@ -1,7 +1,9 @@
-# Cloudflare Pages config
-name = "wayward-house"
+# Cloudflare Workers + Assets config
+name = "waywardhouse-hub"
 compatibility_date = "2025-04-01"
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
 
 [vars]
 PUBLIC_CF_ANALYTICS_TOKEN = "REPLACE_WITH_TOKEN"

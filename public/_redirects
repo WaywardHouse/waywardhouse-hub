@@ -1,10 +1,6 @@
-# Cloudflare Pages — _redirects
-# Note: 200 proxy rules are NOT used here — cross-origin proxying is handled
-# by functions/[[path]].js (CF Pages Function), which works on all domains
-# including *.pages.dev.  Only 3xx redirects live here.
-
-# ── Apex normalisation ────────────────────────────────────────────────────────
-https://www.wayward.house/*  https://wayward.house/:splat  301!
+# Cloudflare Workers — _redirects
+# Note: Workers _redirects only supports relative source paths.
+# www→apex redirect is handled at the Cloudflare DNS/domain level.
 
 # ── Old URL continuity (301 permanent) ────────────────────────────────────────
 /articles/system-signals-001*  /signals/issue-001  301
