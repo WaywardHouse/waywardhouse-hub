@@ -16,16 +16,21 @@
 
 const PROXY_ROUTES = [
   // Hub has its own listing page for essays and signals — only proxy subpaths.
-  { prefix: '/essays/',                   backend: 'https://wh-essays.pages.dev',                    hubOwnsRoot: true  },
-  { prefix: '/signals/',                  backend: 'https://wh-signals.pages.dev',                   hubOwnsRoot: true  },
+  // isBook: false — Quarto website projects use src="site_libs/..." (no ../),
+  // so the browser URL must NOT have a trailing slash (see redirect below).
+  { prefix: '/essays/',                   backend: 'https://wh-essays.pages.dev',                    hubOwnsRoot: true,  isBook: false },
+  { prefix: '/signals/',                  backend: 'https://wh-signals.pages.dev',                   hubOwnsRoot: true,  isBook: false },
 
   // Books: no hub page exists — proxy everything including the root.
-  { prefix: '/computational-geography/', backend: 'https://wh-computational-geography.pages.dev', hubOwnsRoot: false },
-  { prefix: '/mathematics/',             backend: 'https://wh-mathematics.pages.dev',             hubOwnsRoot: false },
-  { prefix: '/math-for-data-science-ai/', backend: 'https://wh-math-ds-ai.pages.dev',            hubOwnsRoot: false },
-  { prefix: '/data-engineering/',        backend: 'https://wh-data-engineering.pages.dev',       hubOwnsRoot: false },
-  { prefix: '/systems-thinking/',        backend: 'https://wh-systems-thinking.pages.dev',       hubOwnsRoot: false },
-  { prefix: '/gearlab/',                 backend: 'https://wh-gearlab.pages.dev',                hubOwnsRoot: false },
+  // isBook: true — Quarto book projects use src="../site_libs/..." (with ../),
+  // so the browser URL MUST have a trailing slash for the relative path to
+  // resolve to /prefix/site_libs/ instead of /site_libs/.
+  { prefix: '/computational-geography/', backend: 'https://wh-computational-geography.pages.dev', hubOwnsRoot: false, isBook: true },
+  { prefix: '/mathematics/',             backend: 'https://wh-mathematics.pages.dev',             hubOwnsRoot: false, isBook: true },
+  { prefix: '/math-for-data-science-ai/', backend: 'https://wh-math-ds-ai.pages.dev',            hubOwnsRoot: false, isBook: true },
+  { prefix: '/data-engineering/',        backend: 'https://wh-data-engineering.pages.dev',       hubOwnsRoot: false, isBook: true },
+  { prefix: '/systems-thinking/',        backend: 'https://wh-systems-thinking.pages.dev',       hubOwnsRoot: false, isBook: true },
+  { prefix: '/gearlab/',                 backend: 'https://wh-gearlab.pages.dev',                hubOwnsRoot: false, isBook: true },
 ];
 
 // Legacy /learn/<slug> paths — redirect to the canonical path without the prefix.
@@ -54,7 +59,7 @@ export async function onRequest(context) {
     }
   }
 
-  for (const { prefix, backend, hubOwnsRoot } of PROXY_ROUTES) {
+  for (const { prefix, backend, hubOwnsRoot, isBook } of PROXY_ROUTES) {
     const base = prefix.slice(0, -1); // '/essays/' → '/essays'
 
     const isRoot    = path === base || path === prefix;
@@ -65,16 +70,22 @@ export async function onRequest(context) {
     // Hub-owned listing pages (/essays/, /signals/) — let the static file serve.
     if (isRoot && hubOwnsRoot) return context.next();
 
-    // Sub-paths with a trailing slash get a 301 redirect to the canonical
-    // no-trailing-slash URL.  Quarto WEBSITE projects use bare relative paths
-    // like src="site_libs/quarto-nav.js" (no leading slash, no ../), which
-    // resolve correctly only when the browser URL is NOT a "directory" (i.e.
-    // has no trailing slash).  Without this redirect, browsers at
-    // /essays/alberta-calling/ resolve site_libs/ inside that directory instead
-    // of at /essays/site_libs/ — causing X-Content-Type-Options MIME errors.
-    if (isSubpath && path.endsWith('/')) {
-      const canonical = url.origin + path.slice(0, -1) + (url.search || '');
-      return Response.redirect(canonical, 301);
+    if (isSubpath) {
+      if (isBook) {
+        // Quarto BOOK projects use src="../site_libs/..." (relative with ../),
+        // which only resolves correctly when the browser URL is a "directory"
+        // (has a trailing slash).  Redirect bare sub-paths to the slash form.
+        if (!path.endsWith('/')) {
+          return Response.redirect(url.origin + path + '/' + (url.search || ''), 301);
+        }
+      } else {
+        // Quarto WEBSITE projects use src="site_libs/..." (no ../).
+        // The browser URL must NOT have a trailing slash so that site_libs/
+        // resolves to /prefix/site_libs/ rather than /prefix/slug/site_libs/.
+        if (path.endsWith('/')) {
+          return Response.redirect(url.origin + path.slice(0, -1) + (url.search || ''), 301);
+        }
+      }
     }
 
     // Compute the sub-path to forward to the backend.
@@ -83,9 +94,12 @@ export async function onRequest(context) {
       subpath = '/';
     } else {
       subpath = '/' + path.slice(prefix.length);
-      // Strip trailing slash — Quarto outputs slug.html; CF Pages serves at
-      // /slug (no slash).  A trailing slash causes a 308 redirect loop.
-      if (subpath.length > 1 && subpath.endsWith('/')) {
+      // For website routes (not books), strip trailing slash: Quarto website
+      // projects output slug.html and CF Pages serves at /slug (no slash).
+      // For book routes, the trailing slash is preserved because book pages
+      // live in directories (getting-started/index.html) and the backend
+      // returns 200 for the slash form.
+      if (!isBook && subpath.length > 1 && subpath.endsWith('/')) {
         subpath = subpath.slice(0, -1);
       }
     }
