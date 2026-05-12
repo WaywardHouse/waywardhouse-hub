@@ -64,7 +64,8 @@ const { active, book } = Astro.props;
   async function boot() {
     if (booted) return;
     booted = true;
-    const { PagefindUI } = await import('/pagefind/pagefind-ui.js');
+    await import('/pagefind/pagefind-ui.js');
+    const PagefindUI = window.PagefindUI;
     const modal = document.getElementById('pagefind-modal');
     modal.removeAttribute('hidden');
     modal.innerHTML = '<div class="wh-search-modal"><button class="wh-search-modal__close" aria-label="Close">×</button><div class="wh-search-modal__inner"><div id="pagefind-mount"></div></div></div>';
