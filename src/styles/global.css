@@ -2325,7 +2325,7 @@
   line-height: 1;
 }
 .wh-search-modal__close:hover { color: var(--wh-white); }
-#pagefind-modal > div { width: 100%; max-width: 680px; }
+.wh-search-modal__inner { width: 100%; max-width: 680px; }
 
 /* ── Empty state ────────────────────────────────────────────────────────── */
 .wh-empty {
