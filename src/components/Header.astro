@@ -64,6 +64,9 @@ const { active, book } = Astro.props;
   async function boot() {
     if (booted) return;
     booted = true;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = '/pagefind/pagefind-ui.css';
+    document.head.appendChild(link);
     await import('/pagefind/pagefind-ui.js');
     const PagefindUI = window.PagefindUI;
     const modal = document.getElementById('pagefind-modal');

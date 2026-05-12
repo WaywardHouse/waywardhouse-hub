@@ -2305,6 +2305,20 @@
 }
 
 /* ── Pagefind search modal ──────────────────────────────────────────────── */
+
+/* Map Pagefind's own CSS variables to the site design tokens */
+.wh-search-modal__inner {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: var(--wh-red);
+  --pagefind-ui-text: var(--wh-dark);
+  --pagefind-ui-background: var(--wh-paper);
+  --pagefind-ui-border: var(--wh-rule);
+  --pagefind-ui-tag: var(--wh-rule);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 0px;
+  --pagefind-ui-font: var(--wh-ff-body);
+}
+
 .wh-search-modal {
   position: fixed; inset: 0;
   background: rgba(10,10,10,0.82);
@@ -2325,7 +2339,14 @@
   line-height: 1;
 }
 .wh-search-modal__close:hover { color: var(--wh-white); }
-.wh-search-modal__inner { width: 100%; max-width: 680px; }
+.wh-search-modal__inner {
+  width: 100%;
+  max-width: 680px;
+  background: var(--wh-paper);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
 
 /* ── Empty state ────────────────────────────────────────────────────────── */
 .wh-empty {
