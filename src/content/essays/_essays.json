@@ -1,5 +1,20 @@
 [
   {
+    "id": "who-pays-for-sprawl",
+    "title": "Who Pays for Sprawl",
+    "dek": "Every new suburb generates development fees and property taxes. It also creates kilometres of pipe, road, and wire that someone will have to maintain forever. The math rarely adds up.",
+    "pubDate": "2026-05-12",
+    "topic": "Economy",
+    "topics": ["urban-geography", "economic-geography"],
+    "readTime": 28,
+    "coords": "51.0°N · 114.1°W",
+    "heroImage": "egy-01",
+    "heroTreatment": "duotone",
+    "featured": false,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "the-measurement-state",
     "title": "The Measurement State",
     "dek": "Before a government can manage a territory, it has to see it. The sensors, registries, and observation systems that make Alberta legible to the state are also making it legible to everyone else.",
