@@ -160,6 +160,13 @@
   if (_ftr) document.body.appendChild(_ftr);
   if (_top) document.body.appendChild(_top);
 
+  /* ── 0b. Relocate Quarto search button into header actions slot ─────── */
+  var _searchSlot   = document.getElementById('wh-bk-search-slot');
+  var _quartoSearch = document.getElementById('quarto-search');
+  if (_searchSlot && _quartoSearch) {
+    _searchSlot.appendChild(_quartoSearch);
+  }
+
   /* ── 1. Sidebar: hide Quarto's built-in navbar chrome ───────────────── */
   var hdr = document.querySelector('#quarto-header, header.navbar');
   if (hdr) hdr.style.display = 'none';
