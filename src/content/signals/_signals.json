@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-007",
+    "issue": 7,
+    "title": "System Signals No. 7",
+    "pubDate": "2026-05-14",
+    "topic": "Economy",
+    "summary": "Trump rejects Iran's peace counteroffer as global oil inventories drain at a record 4 mb/d; an Alberta judge quashes the separation petition on treaty consultation grounds the day before Carney and Smith sign an energy cooperation agreement; and two contested midstream ownership transitions — Shell's LNG Canada auction and Keyera's $5.3B NGL acquisition — reshape who controls Canadian export infrastructure.",
+    "bullets": [
+      "Trump calls Iran's response 'garbage' and declares the ceasefire 'on life support'; IEA reports 12.8 mb/d in supply losses since February with inventories falling at a record pace — and one-third of global fertilizer moves through the same strait, hitting Saskatchewan farmers already squeezed by flooding and diesel up 50%.",
+      "Justice Leonard quashes the Alberta separation petition for failing to consult First Nations; Smith appeals the 'anti-democratic' ruling as she and Carney prepare to sign an energy implementation agreement the following day.",
+      "Shell auctions up to 30% of LNG Canada to Apollo, Blackstone, or KKR; Keyera closes its contested $5.3B Fort Saskatchewan NGL acquisition over a Competition Bureau challenge; Canada sheds 18,000 jobs in April, placing the Bank of Canada's next move in both directions at once."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-006",
     "issue": 6,
     "title": "System Signals No. 6",

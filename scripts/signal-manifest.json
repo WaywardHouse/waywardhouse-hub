@@ -1,5 +1,9 @@
 [
   {
+    "slug": "issue-007",
+    "binding": "SIGNAL_ISSUE_007"
+  },
+  {
     "slug": "issue-001",
     "binding": "SIGNAL_ISSUE_001"
   },
