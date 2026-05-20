@@ -1,5 +1,19 @@
 [
   {
+    "id": "winter-as-a-health-system",
+    "title": "Winter as a Health System",
+    "dek": "At -40°C, pipes freeze, roads close, ambulances slow down, and emergency rooms fill. Cold is not background. It is infrastructure.",
+    "pubDate": "2026-04-04",
+    "topic": "Geography",
+    "topics": ["health-geography", "physical-geography"],
+    "readTime": 14,
+    "heroImage": "geo-02",
+    "heroTreatment": "duotone",
+    "featured": false,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "who-pays-for-sprawl",
     "title": "Who Pays for Sprawl",
     "dek": "Every new suburb generates development fees and property taxes. It also creates kilometres of pipe, road, and wire that someone will have to maintain forever. The math rarely adds up.",
