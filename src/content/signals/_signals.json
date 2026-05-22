@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-008",
+    "issue": 8,
+    "title": "System Signals No. 8",
+    "pubDate": "2026-05-21",
+    "topic": "Economy",
+    "summary": "Carney and Smith sign a pipeline implementation agreement committing to a 1-million-barrel-per-day west coast corridor by September 2027; Saudi Aramco's CEO puts a 2027 floor on oil market normalization if Hormuz stays closed past mid-June; April core CPI hits 2.0% for the first time in five years; and a week of Alberta political turbulence — a premature UCP press release, the Centurion Project electoral data scandal, two pro-Canada minister resignations, and a cabinet reshuffle — runs alongside federal airport privatization legislation.",
+    "bullets": [
+      "Carney and Smith sign a pipeline deal — 1 mb/d to Pacific tidewater, September 2027 construction start, $130/tonne carbon price by 2035, conditional on the Oil Sands Alliance CCS project whose goals were quietly revised downward the same week; BC and Coastal First Nations were not at the table.",
+      "Aramco CEO Amin Nasser says the oil market will not normalize until 2027 if Hormuz disruption persists past mid-June — 880 million barrels lost to date, tanker fleet 'mixed up,' Petroline rerouting at 7 mb/d not a replacement; the 2027 timeline matches the pipeline's construction window exactly.",
+      "April CPI core measures hit 2.0% for the first time in five years; UCP committee passes motion for October 19 separation referendum after premature press release chaos; Centurion Project data scandal links Alberta separatist petition to Michigan Republican operatives 10xVotes; Finance Minister Horner and Hospitals Minister Jones resign; Smith reshuffles cabinet."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-007",
     "issue": 7,
     "title": "System Signals No. 7",
