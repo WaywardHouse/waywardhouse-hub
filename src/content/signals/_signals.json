@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-009",
+    "issue": 9,
+    "title": "System Signals No. 9",
+    "pubDate": "2026-05-28",
+    "topic": "Economy",
+    "summary": "Trump declares the Iran deal 'largely negotiated' while U.S. forces strike Iranian mine-laying vessels two days later; Canada seals its first European LNG supply agreement from Ksi Lisims to German state buyer SEFE; western premiers align on infrastructure at Kananaskis while clashing over the referendum; Greer says Canada is in a 'different spot' on tariffs five weeks before CUSMA's review opens; and 112,000 private sector jobs lost year-to-date points to structural contraction in the talent pipeline that no announced project has a mechanism to address.",
+    "bullets": [
+      "Trump says the Iran deal is 'largely negotiated' then U.S. forces strike Iranian mine-layers two days later; Brent rebounds toward $97 after a 10% fall; the 60-day MOU framework exists but the White House and Tehran contradict each other on whether the Strait reopening is agreed.",
+      "Canada signs its first European LNG offtake — SEFE of Germany buys 1 Mtpa from Ksi Lisims for up to 20 years; LNG Canada Phase 2 FID momentum builds; western premiers agree on trade corridors at Kananaskis while Eby says Canada cannot reward premiers who threaten to leave with infrastructure.",
+      "112,000 private sector jobs lost year-to-date, net hiring intentions turn negative for the first time in 2026, and Alberta's AESO grid queue hits 21.1 GW of data centre demand against a 1,200 MW cap — the major project announcements have no accompanying talent pipeline or grid capacity mechanism."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-008",
     "issue": 8,
     "title": "System Signals No. 8",
