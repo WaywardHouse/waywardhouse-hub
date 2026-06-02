@@ -1,5 +1,19 @@
 [
   {
+    "id": "smoke-in-the-lungs-of-the-city",
+    "title": "Smoke in the Lungs of the City",
+    "dek": "Wildfire smoke blankets Alberta for weeks each summer. Not everyone can close a window.",
+    "pubDate": "2026-06-02",
+    "topic": "Geography",
+    "topics": ["health-geography", "environmental-geography"],
+    "readTime": 17,
+    "heroImage": "geo-01",
+    "heroTreatment": "duotone",
+    "featured": false,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "building-for-hail",
     "title": "Building for Hail",
     "dek": "Calgary is in hail alley. The question is how much of that knowledge has been built into the roofs, walls, and deductibles of 600,000 households.",
