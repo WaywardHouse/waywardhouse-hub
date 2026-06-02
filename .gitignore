@@ -24,6 +24,9 @@ Thumbs.db
 # logs
 *.log
 npm-debug.log*
+
+# vector ingest manifest (environment-specific, not source code)
+scripts/.ingest-manifest.json
 scripts/content-bundle.js
 scripts/content-bundle.js
 .cloudflare_env
