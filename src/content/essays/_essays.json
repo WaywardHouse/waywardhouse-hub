@@ -1,5 +1,19 @@
 [
   {
+    "id": "the-geography-of-royalty",
+    "title": "The Geography of Royalty",
+    "dek": "Alberta has extracted several trillion dollars' worth of oil and bitumen from its subsurface. The public share of that wealth is determined by a royalty system that has never collected enough — and rarely saved what it did.",
+    "pubDate": "2026-06-09",
+    "topic": "Geography",
+    "topics": ["economic-geography", "historical-geography"],
+    "readTime": 18,
+    "heroImage": "sys-01",
+    "heroTreatment": "duotone",
+    "featured": true,
+    "draft": false,
+    "author": "Paul Hobson"
+  },
+  {
     "id": "smoke-in-the-lungs-of-the-city",
     "title": "Smoke in the Lungs of the City",
     "dek": "Wildfire smoke blankets Alberta for weeks each summer. Not everyone can close a window.",
