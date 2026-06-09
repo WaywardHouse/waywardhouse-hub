@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-010",
+    "issue": 10,
+    "title": "System Signals No. 10",
+    "pubDate": "2026-06-05",
+    "topic": "Economy",
+    "summary": "Brent crude falls roughly 20% from its 2026 peak as ceasefire optimism grows, shifting the commercial foundation beneath Canada's announced pipeline and LNG deals; Canada adds 88,000 jobs in May — the biggest gain in six months — reversing nearly 80% of 2026's losses and reshaping the Bank of Canada's June 10 calculus; Trade Minister LeBlanc visits Washington and reports 'some progress, lots more to do' on CUSMA while Trump revives the 51st state rhetoric and a new 10% forced-labour tariff lands on 60 countries including Canada; and three northern BC pipeline routes are now documented as Alberta prepares its July 1 Major Projects Office submission.",
+    "bullets": [
+      "Brent crude settles near $92–95 per barrel — down roughly 20% from its 2026 peak — on growing optimism that the U.S.-Iran ceasefire framework will hold and the Strait of Hormuz will reopen; at $92–95 the commercial urgency behind the pipeline deal and the Ksi Lisims LNG agreement is narrower than when both were signed.",
+      "Canada adds 88,000 jobs in May against an economist forecast of 10,000; unemployment falls 0.3 points to 6.6%; full-time employment rises 154,000 as the full-time/part-time degradation of January–April partially corrects; wages decelerate from 4.8% to 3.2% — a direct disinflationary signal for the Bank of Canada ahead of its June 10 decision.",
+      "Three northern BC pipeline routes now documented; LNG Canada Phase 2 FID expected by year-end; Bitdeer's Fox Creek US$155M bring-your-own-generation facility breaks ground — the first working model for bypassing the AESO grid constraint that holds 37 data centre proposals in a deferred queue."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-009",
     "issue": 9,
     "title": "System Signals No. 9",
