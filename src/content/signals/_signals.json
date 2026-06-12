@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-011",
+    "issue": 11,
+    "title": "System Signals No. 11",
+    "pubDate": "2026-06-12",
+    "topic": "Economy",
+    "summary": "The Bank of Canada holds at 2.25% and publishes its reaction function — new U.S. trade restrictions push toward a cut, persistent energy inflation toward consecutive hikes — and Trump activates the trade trigger the same day, saying he is 'not looking to renew' CUSMA three weeks before the July 1 review; the Iran war whipsaws from its sharpest escalation in months to a reported 14-point draft deal that sends Brent below $86.50 by Friday morning; Danielle Smith tells the Global Energy Show she wants eight million barrels per day within a decade; and a CBC investigation finds overseas Facebook accounts impersonating Alberta separatists for engagement revenue ahead of the October 19 referendum.",
+    "bullets": [
+      "Macklem holds at 2.25% and names both triggers explicitly — 'if the United States imposes significant new trade restrictions on Canada, we may need to cut'; hours later Trump says he is 'not looking to renew' CUSMA, though the agreement rolls into annual reviews until 2036 rather than expiring, and the U.S. ambassador reframes the threat as 'make us an offer' the next day.",
+      "The Iran war compresses a full conflict cycle into five days: a downed Apache near Hormuz, CENTCOM strikes, Iran's claimed counter-strikes on 18 U.S. targets across Kuwait, Bahrain and Jordan with the Strait declared closed — then a reported 14-point draft deal lifting sanctions and reopening Hormuz within 30 days sends Brent down 4% to below $86.50, its lowest since early March.",
+      "Smith targets eight million barrels per day within a decade at the Global Energy Show — several multiples beyond the announced infrastructure — while Canada posts a $2.7B April trade surplus on record energy-led exports, and CBC finds at least 14 overseas Facebook accounts monetizing Alberta separatist content through Meta's creator program ahead of the October 19 referendum."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-010",
     "issue": 10,
     "title": "System Signals No. 10",
