@@ -1,5 +1,20 @@
 [
   {
+    "id": "issue-012",
+    "issue": 12,
+    "title": "System Signals No. 12",
+    "pubDate": "2026-06-19",
+    "topic": "Economy",
+    "summary": "The U.S.-Iran war reaches an interim settlement — a draft signed at Versailles, the Strait of Hormuz reopening to the first Saudi tankers in three months — even as the talks for a lasting deal are abruptly called off in Switzerland and Brent settles near $80, roughly 35% below its 2026 peak; a hot microphone at the G7 catches Carney pitching Trump on Canada's 49,000-car Chinese EV cap while the two hold no formal bilateral; CUSMA's review clock runs down to two weeks with the U.S. signalling it prefers annual reviews to renewal; and Alberta prepares its July 1 submission for the newly named Northwest Coast Oil Pipeline into an oil price twenty dollars below where the deal behind it was struck.",
+    "bullets": [
+      "The shock that has organized twelve issues begins to lift: Hormuz reopens to roughly 10 million barrels in transit Thursday, including the first Saudi-owned tankers since the war began; Trump signs a draft deal at Versailles requiring Iran to dilute its enriched uranium for sanctions relief; Brent settles near $80 — but the Switzerland talks for a lasting settlement are called off Friday, and the war premium is draining out of the price ahead of the treaty.",
+      "A live mic at the G7 in Évian-les-Bains catches Carney telling Trump the Chinese EV quota is 'less than three per cent of our market, 49,000 cars' and 'a cap' — 'I thought you'd actually like that'; with no formal bilateral scheduled, the CUSMA negotiation is now conducted by hot-mic aside, the U.S. wary of Canada as a 'drop off port' for Chinese vehicles.",
+      "CUSMA's July 1 review points toward annual-review limbo rather than a sixteen-year renewal — ten years of certainty about nothing — and Alberta files its Northwest Coast Oil Pipeline submission to the Major Projects Office the same day, into an $80 price environment that has narrowed the commercial case struck at $100 by twenty dollars a barrel."
+    ],
+    "heroImage": "sys-01",
+    "draft": false
+  },
+  {
     "id": "issue-011",
     "issue": 11,
     "title": "System Signals No. 11",
